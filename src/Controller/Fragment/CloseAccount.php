@@ -16,10 +16,10 @@ namespace Ferienpass\CmsBundle\Controller\Fragment;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\CoreBundle\Exception\ResponseException;
 use Contao\FormTextField;
-use Contao\FrontendUser;
-use Contao\MemberModel;
-use Ferienpass\CoreBundle\Message\AccountDeleted;
+use Ferienpass\CoreBundle\Entity\User;
+use Ferienpass\CoreBundle\Message\AccountDelete;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,10 +33,10 @@ final class CloseAccount extends AbstractController
     {
     }
 
-    public function __invoke(Request $request, Session $session): Response
+    public function __invoke(Request $request, Session $session, Security $security): Response
     {
         $user = $this->getUser();
-        if (!$user instanceof FrontendUser) {
+        if (!$user instanceof User) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
@@ -60,18 +60,11 @@ final class CloseAccount extends AbstractController
             }
 
             if (!$passwordWidget->hasErrors()) {
-                if (null !== $memberModel = MemberModel::findByPk($user->id)) {
-                    $memberModel->delete();
+                $this->messageBus->dispatch(new AccountDelete($user->getId()));
 
-                    $this->logger->info(sprintf('User account ID %u has been deleted', $user->id));
-                }
+                $security->logout();
 
-                $this->container->get('security.token_storage')->setToken();
-                $session->invalidate();
-
-                $this->messageBus->dispatch(new AccountDeleted((int) $user->id));
-
-                throw new ResponseException($this->redirectToRoute('account_deleted'));
+                return $this->redirectToRoute('account_deleted');
             }
 
             throw new ResponseException(new JsonResponse(['error' => $passwordWidget->getErrorAsString()], Response::HTTP_BAD_REQUEST));
