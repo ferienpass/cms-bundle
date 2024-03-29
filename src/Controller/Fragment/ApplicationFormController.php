@@ -20,7 +20,7 @@ use Ferienpass\CmsBundle\Form\ApplyFormParticipantType;
 use Ferienpass\CmsBundle\Form\ApplyFormType;
 use Ferienpass\CoreBundle\ApplicationSystem\ApplicationSystems;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
-use Ferienpass\CoreBundle\Entity\Participant;
+use Ferienpass\CoreBundle\Entity\Participant\ParticipantInterface;
 use Ferienpass\CoreBundle\Facade\AttendanceFacade;
 use Ferienpass\CoreBundle\Repository\AttendanceRepository;
 use Ferienpass\CoreBundle\Ux\Flash;
@@ -95,7 +95,7 @@ class ApplicationFormController extends AbstractController
         return $this->redirect($request->getUri());
     }
 
-    private function handleSubmitParticipant(Participant $participant, OfferInterface $offer, Request $request): Response
+    private function handleSubmitParticipant(ParticipantInterface $participant, OfferInterface $offer, Request $request): Response
     {
         $this->doctrine->getManager()->persist($participant);
         $this->doctrine->getManager()->flush();

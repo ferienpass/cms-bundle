@@ -25,10 +25,11 @@ use Ferienpass\CoreBundle\ApplicationSystem\FirstComeApplicationSystem;
 use Ferienpass\CoreBundle\Entity\Attendance;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
 use Ferienpass\CoreBundle\Entity\OfferDate;
-use Ferienpass\CoreBundle\Entity\Participant;
+use Ferienpass\CoreBundle\Entity\Participant\ParticipantInterface;
 use Ferienpass\CoreBundle\Exception\IneligibleParticipantException;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,7 +39,7 @@ use Symfony\Component\Translation\TranslatableMessage;
 
 class ApplyFormType extends AbstractType
 {
-    public function __construct(private readonly Security $security, private readonly ManagerRegistry $doctrine, private readonly RequestStack $requestStack, private readonly OptIn $optIn, private readonly Connection $connection)
+    public function __construct(private readonly Security $security, private readonly ManagerRegistry $doctrine, private readonly RequestStack $requestStack, private readonly OptIn $optIn, private readonly Connection $connection, #[Autowire(param: 'ferienpass.model.participant.class')] private readonly string $participantEntityClass)
     {
     }
 
@@ -49,11 +50,11 @@ class ApplyFormType extends AbstractType
 
         $builder
             ->add('participants', EntityType::class, [
-                'class' => Participant::class,
+                'class' => $this->participantEntityClass,
                 'multiple' => true,
                 'expanded' => true,
                 'choice_label' => 'name',
-                'choice_attr' => function (Participant $key) use ($offer, $applicationSystem): array {
+                'choice_attr' => function (ParticipantInterface $key) use ($offer, $applicationSystem): array {
                     if ($this->participantIsApplied($key, $offer)) {
                         return ['disabled' => 'disabled', 'selected' => 'true'];
                     }
@@ -98,7 +99,7 @@ class ApplyFormType extends AbstractType
         $resolver->setAllowedTypes('application_system', ApplicationSystemInterface::class);
     }
 
-    private function participantIsApplied(Participant $participant, OfferInterface $offer): bool
+    private function participantIsApplied(ParticipantInterface $participant, OfferInterface $offer): bool
     {
         return $participant->getAttendances()->filter(fn (Attendance $a) => $offer === $a->getOffer() && !$a->isWithdrawn())->count() > 0;
     }
@@ -106,7 +107,7 @@ class ApplyFormType extends AbstractType
     /**
      * @throws IneligibleParticipantException
      */
-    private function ineligibility(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function ineligibility(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         $this->unconfirmed($offer, $participant, $applicationSystem);
         $this->noAccessCode($offer, $participant, $applicationSystem);
@@ -116,7 +117,7 @@ class ApplyFormType extends AbstractType
         $this->dayLimitReached($offer, $participant, $applicationSystem);
     }
 
-    private function ageValid(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function ageValid(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         if (!$offer->getMinAge() && !$offer->getMaxAge()) {
             return;
@@ -152,7 +153,7 @@ class ApplyFormType extends AbstractType
         }
     }
 
-    private function overlappingOffer(Participant $participant, OfferInterface $offer): void
+    private function overlappingOffer(ParticipantInterface $participant, OfferInterface $offer): void
     {
         /** @var EntityRepository $repo */
         $repo = $this->doctrine->getRepository(OfferDate::class);
@@ -185,7 +186,7 @@ class ApplyFormType extends AbstractType
         }
     }
 
-    private function limitReached(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function limitReached(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         $task = $applicationSystem->getTask();
         if (!$task?->getMaxApplications() || $task->isSkipMaxApplications()) {
@@ -202,7 +203,7 @@ class ApplyFormType extends AbstractType
         }
     }
 
-    private function dayLimitReached(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function dayLimitReached(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         if (!$applicationSystem instanceof FirstComeApplicationSystem) {
             return;
@@ -227,7 +228,7 @@ class ApplyFormType extends AbstractType
         }
     }
 
-    private function unconfirmed(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function unconfirmed(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         if (null !== $participant->getUser()) {
             return;
@@ -240,7 +241,7 @@ class ApplyFormType extends AbstractType
         }
     }
 
-    private function noAccessCode(OfferInterface $offer, Participant $participant, ApplicationSystemInterface $applicationSystem): void
+    private function noAccessCode(OfferInterface $offer, ParticipantInterface $participant, ApplicationSystemInterface $applicationSystem): void
     {
         if (null === $applicationSystem->getTask()?->getAccessCodeStrategy() || $applicationSystem->getTask()?->getAccessCodeStrategy()?->isEnabledParticipant($participant)) {
             return;

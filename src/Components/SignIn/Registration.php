@@ -15,12 +15,12 @@ namespace Ferienpass\CmsBundle\Components\SignIn;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Ferienpass\CmsBundle\Form\UserRegistrationType;
-use Ferienpass\CoreBundle\Entity\Participant;
+use Ferienpass\CoreBundle\Entity\Participant\BaseParticipant;
 use Ferienpass\CoreBundle\Entity\User;
 use Ferienpass\CoreBundle\Message\AccountCreated;
 use Ferienpass\CoreBundle\Message\AccountRegistrationHelp;
 use Ferienpass\CoreBundle\Message\AccountResendActivation;
-use Ferienpass\CoreBundle\Repository\ParticipantRepository;
+use Ferienpass\CoreBundle\Repository\ParticipantRepositoryInterface;
 use Ferienpass\CoreBundle\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -41,7 +41,7 @@ class Registration extends AbstractController
     #[LiveProp]
     public User $initialFormData;
 
-    public function __construct(private readonly ParticipantRepository $participantRepository)
+    public function __construct(private readonly ParticipantRepositoryInterface $participantRepository)
     {
         $this->initialFormData = new User();
     }
@@ -92,7 +92,7 @@ class Registration extends AbstractController
         }
 
         foreach ($this->participantRepository->findBy(['id' => $ids]) as $participant) {
-            /** @var Participant $participant */
+            /** @var BaseParticipant $participant */
             if (null === $participant) {
                 continue;
             }

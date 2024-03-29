@@ -16,16 +16,16 @@ namespace Ferienpass\CmsBundle\Controller\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 use Ferienpass\CmsBundle\Controller\AbstractController;
 use Ferienpass\CmsBundle\Form\UserParticipantsType;
-use Ferienpass\CoreBundle\Entity\Participant;
+use Ferienpass\CoreBundle\Entity\Participant\BaseParticipant;
 use Ferienpass\CoreBundle\Entity\User;
-use Ferienpass\CoreBundle\Repository\ParticipantRepository;
+use Ferienpass\CoreBundle\Repository\ParticipantRepositoryInterface;
 use Ferienpass\CoreBundle\Ux\Flash;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ParticipantsController extends AbstractController
 {
-    public function __construct(private readonly ParticipantRepository $repository, private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly ParticipantRepositoryInterface $repository, private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -42,7 +42,7 @@ final class ParticipantsController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var iterable<int, Participant> $participants */
+            /** @var iterable<int, BaseParticipant> $participants */
             $participants = $form->get('participants')->getData();
 
             foreach ($participants as $participant) {

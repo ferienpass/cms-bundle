@@ -16,7 +16,7 @@ namespace Ferienpass\CmsBundle\Controller\Fragment;
 use Contao\CoreBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Ferienpass\CmsBundle\Form\UserParticipantsType;
-use Ferienpass\CoreBundle\Entity\Participant;
+use Ferienpass\CoreBundle\Entity\Participant\BaseParticipant;
 use Ferienpass\CoreBundle\Entity\User;
 use Ferienpass\CoreBundle\Ux\Flash;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +39,7 @@ class RegistrationWelcomeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var iterable<Participant> $participants */
+            /** @var iterable<BaseParticipant> $participants */
             $participants = $form->get('participants')->getData();
 
             foreach ($participants as $participant) {

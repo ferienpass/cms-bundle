@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Ferienpass\CmsBundle\Form\CompundType;
 
 use Ferienpass\CoreBundle\Entity\Edition;
-use Ferienpass\CoreBundle\Entity\Participant;
 use Ferienpass\CoreBundle\Repository\EditionRepository;
+use Ferienpass\CoreBundle\Repository\ParticipantRepositoryInterface;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -31,7 +32,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticipantType extends AbstractType
 {
-    public function __construct(private readonly Security $security, private readonly EditionRepository $editionRepository)
+    public function __construct(private readonly Security $security, private readonly EditionRepository $editionRepository, #[Autowire(param: 'ferienpass.model.participant.class')] private readonly string $participantEntityClass, private readonly ParticipantRepositoryInterface $participantRepository)
     {
     }
 
@@ -106,8 +107,13 @@ class ParticipantType extends AbstractType
             'edition' => null,
             'label_format' => 'apply.%name%',
             'translation_domain' => 'cms',
-            'data_class' => Participant::class,
-            'empty_data' => fn (FormInterface $form) => new Participant($user ?? null),
+            'data_class' => $this->participantEntityClass,
+            'empty_data' => function (FormInterface $form) use ($user) {
+                $participant = $this->participantRepository->createNew();
+                $participant->setUser($user);
+
+                return $participant;
+            },
         ]);
     }
 }
