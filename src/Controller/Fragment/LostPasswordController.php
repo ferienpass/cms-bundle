@@ -40,8 +40,9 @@ class LostPasswordController extends AbstractController
             return $this->redirectToRoute('lost_password', ['method' => 'requested']);
         }
 
+        /** @noinspection FormViewTemplate */
         return $this->render('@FerienpassCms/fragment/reset_password/request.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }

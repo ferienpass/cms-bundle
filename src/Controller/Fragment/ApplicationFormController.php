@@ -75,10 +75,11 @@ class ApplicationFormController extends AbstractController
             return $this->handleSubmitApplications($applicationForm->get('participants')->getData(), $offer, $request);
         }
 
+        /** @noinspection FormViewTemplate */
         return $this->render('@FerienpassCms/fragment/application_form.html.twig', [
             'offer' => $offer,
-            'form' => $applicationForm->createView(),
-            'newParticipant' => $participantForm->createView(),
+            'form' => $applicationForm,
+            'newParticipant' => $participantForm,
             'applicationSystem' => $applicationSystem,
             'vacant' => null === $vacant ? null : max(0, $vacant),
         ]);

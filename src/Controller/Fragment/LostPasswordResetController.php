@@ -81,8 +81,9 @@ class LostPasswordResetController extends AbstractController
             return $this->redirect('/');
         }
 
+        /** @noinspection FormViewTemplate */
         return $this->render('@FerienpassCms/fragment/reset_password/reset.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }
