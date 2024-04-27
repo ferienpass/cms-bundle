@@ -38,11 +38,12 @@ final class OfferDetailsController extends AbstractController
 
         return $this->render('@FerienpassCms/fragment/offer_details.html.twig', [
             'offer' => $offer,
+            'attachments' => $this->getAttachments($offer),
             'members' => [],
         ]);
     }
 
-    private function handleDownload(Request $request, OfferInterface $offer): void
+    private function getAttachments(OfferInterface $offer): array
     {
         $files = [];
         if ($offer->getAgreementLetter()) {
@@ -53,9 +54,14 @@ final class OfferDetailsController extends AbstractController
             $files = array_merge($files, $offer->getDownloads());
         }
 
+        return $files;
+    }
+
+    private function handleDownload(Request $request, OfferInterface $offer): void
+    {
         $download = $request->query->get('file');
         $file = FilesModel::findByPath($download);
-        if (null === $file || !\in_array($file->uuid, $files, true)) {
+        if (null === $file || !\in_array($file->uuid, $this->getAttachments($offer), true)) {
             throw new PageNotFoundException('Invalid download');
         }
 
