@@ -22,7 +22,7 @@ use Ferienpass\CmsBundle\UserAccount\UserAccountFragmentValueHolder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsPage('user_account', path: '{alias?teilnehmer}', contentComposition: false)]
+#[AsPage('user_account', path: '{alias}', defaults: ['alias' => '!teilnehmer'], contentComposition: false)]
 class UserAccountPage extends AbstractController
 {
     public function __construct(private readonly UserAccountFragments $fragments)

@@ -1,0 +1,21 @@
+{% extends '@FerienpassCms/fragment/user_account/_base.html.twig' %}
+
+{% block main %}
+
+    <turbo-frame id="modal">
+
+        {{ form_start(form) }}
+
+        <div class="grid grid-cols-3 gap-6">
+
+            {% for field in form.participant %}
+                {{ form_row(field) }}
+            {% endfor %}
+
+        </div>
+
+        {{ form_end(form) }}
+
+    </turbo-frame>
+
+{% endblock %}

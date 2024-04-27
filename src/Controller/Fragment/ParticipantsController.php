@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Ferienpass\CmsBundle\Controller\Fragment;
 
+use Contao\CoreBundle\Exception\PageNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Ferienpass\CmsBundle\Controller\AbstractController;
+use Ferienpass\CmsBundle\Form\EditParticipantType;
 use Ferienpass\CmsBundle\Form\UserParticipantsType;
 use Ferienpass\CoreBundle\Entity\Participant\BaseParticipant;
 use Ferienpass\CoreBundle\Entity\User;
@@ -34,6 +36,10 @@ final class ParticipantsController extends AbstractController
         $user = $this->getUser();
         if (!$user instanceof User) {
             return new Response('', Response::HTTP_NO_CONTENT);
+        }
+
+        if ($request->query->has('bearbeiten')) {
+            return $this->edit($request->query->getInt('bearbeiten'), $request);
         }
 
         // TODO if originalParticipants.length eq 0 then add constraint {MinLength=1}
@@ -58,6 +64,34 @@ final class ParticipantsController extends AbstractController
 
         return $this->render('@FerienpassCms/fragment/user_account/participants.html.twig', [
             'participants' => $originalParticipants,
+            'form' => $form,
+        ]);
+    }
+
+    private function edit(int $id, Request $request): Response
+    {
+        $participant = $this->repository->find($id);
+        if (null === $participant) {
+            throw new PageNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('edit', $participant);
+
+        $form = $this->createForm(EditParticipantType::class, $participant, [
+            'action' => $this->generateUrl($request->attributes->get('_route'), ['alias' => 'teilnehmer', 'bearbeiten' => $id]),
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            $this->addFlash(...Flash::confirmation()->text('Die Daten wurden erfolgreich gespeichert.')->create());
+
+            return $this->redirectToRoute($request->attributes->get('_route'));
+        }
+
+        return $this->render('@FerienpassCms/fragment/user_account/participant_edit.html.twig', [
+            'participant' => $participant,
             'form' => $form,
         ]);
     }

@@ -8,10 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import {Controller} from '@hotwired/stimulus';
+import { Controller } from '@hotwired/stimulus';
 // @ts-ignore
-import {getComponent} from '@symfony/ux-live-component';
-
+import { getComponent } from '@symfony/ux-live-component';
 export default class default_1 extends Controller {
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {

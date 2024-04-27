@@ -54,7 +54,7 @@ class ParticipantType extends AbstractType
             ->add('dateOfBirth', BirthdayType::class, [
                 'label' => 'Geburtsdatum',
                 'widget' => 'single_text',
-                'input' => 'datetime_immutable',
+                'input' => 'datetime',
                 'placeholder' => 'tt.mm.jjjj',
                 'constraints' => [
                     new NotBlank(),
@@ -115,5 +115,13 @@ class ParticipantType extends AbstractType
                 return $participant;
             },
         ]);
+    }
+
+    private function isEditable(string $field): bool
+    {
+        return match ($field) {
+            'firstname', 'lastname', 'dateOfBirth' => false,
+            default => true
+        };
     }
 }

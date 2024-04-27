@@ -15,6 +15,13 @@
                 "webpackMode": "eager",
                 "fetch": "eager",
                 "enabled": true
+            },
+            "modal": {
+                "main": "dist/controllers/modal.js",
+                "name": "ferienpass/cms-modal",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
             }
         },
         "importmap": {
