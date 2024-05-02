@@ -58,5 +58,5 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['edition'] = [
         'tl_class' => 'w50',
         'includeBlankOption' => true,
     ],
-    'sql' => 'int(10) NOT NULL default 0',
+    'sql' => 'int(10) default NULL',
 ];
