@@ -158,8 +158,8 @@
                                     </dd>
                                 </div>
                             {% endif %}
-                            {% set phones = members is not empty ? members|filter(m => 'phone' in m.public_fields|split(','))|map(m => m.phone)|filter(p => p)|merge(members|filter(m => 'mobile' in m.public_fields|split(','))|map(m => m.mobile)|filter(m => m)) : offer.hosts|map(h => h.phone)|filter(v => v) %}
-                            {% set emails = members is not empty ? members|filter(m => 'email' in m.public_fields|split(','))|map(m => m.email)|filter(e => e) : offer.hosts|map(h => h.email)|filter(v => v) %}
+                            {% set phones = (offer.contactUser and 'phone' in offer.contactUser.publicFields and offer.contactUser.phone ? [offer.contactUser.phone] : [])|merge(offer.contactUser and 'mobile' in offer.contactUser.publicFields and offer.contactUser.mobile ? [offer.contactUser.mobile] : [])|merge(offer.hosts|map(h => h.phone))|filter(v => v) %}
+                            {% set emails = (offer.contactUser and 'email' in offer.contactUser.publicFields and offer.contactUser.email ? [offer.contactUser.email] : [])|merge(offer.hosts|map(h => h.email))|filter(v => v) %}
                             {% for phone in phones %}
                                 <div class="mt-3">
                                     <dt class="sr-only">Telefon</dt>

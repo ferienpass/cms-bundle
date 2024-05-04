@@ -72,6 +72,8 @@ final class OfferListController extends AbstractController
 
         $paginator = (new Paginator($qb))->paginate($request->query->getInt('page', 1));
 
+        $this->tagResponse(array_map(fn (OfferInterface $offer) => 'offer.'.$offer->getId(), (array) $paginator->getResults()));
+
         return $this->render('@FerienpassCms/fragment/offer_list.html.twig', [
             'edition' => $edition ?? null,
             'filter' => $filter,
