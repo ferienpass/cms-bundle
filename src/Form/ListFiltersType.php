@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Ferienpass\CmsBundle\Form;
 
-use Ferienpass\CoreBundle\Filter\Type\FilterType;
+use Ferienpass\CmsBundle\Filter\Type\FilterType;
+use Ferienpass\CmsBundle\Form\SimpleType\ContaoRequestTokenType;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -39,6 +40,8 @@ class ListFiltersType extends AbstractType
         if (!($options['short'] ?? false)) {
             $builder->add('submit', SubmitType::class, ['label' => 'Filter anwenden']);
         }
+
+        $builder->add('request_token', ContaoRequestTokenType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

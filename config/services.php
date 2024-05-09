@@ -9,6 +9,15 @@ use Ferienpass\CmsBundle\Controller\Fragment\ChangePasswordController;
 use Ferienpass\CmsBundle\Controller\Fragment\CloseAccount;
 use Ferienpass\CmsBundle\Controller\Fragment\ParticipantsController;
 use Ferienpass\CmsBundle\Controller\Fragment\PersonalDataController;
+use Ferienpass\CmsBundle\Filter\Type\FilterType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\AgeType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\BaseType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\CategoryType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\EarliestDateType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\FavoritesType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\FeeType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\LatestDateType;
+use Ferienpass\CmsBundle\Filter\Type\Offer\NameType;
 use Ferienpass\CmsBundle\Menu\MenuBuilder;
 use Ferienpass\CmsBundle\Page\PageBuilderFactory;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
@@ -31,6 +40,18 @@ return function(ContainerConfigurator $container): void {
         ->instanceof(MigrationInterface::class)
         ->tag('contao.migration')
     ;
+    $services
+        ->instanceof(FilterType::class)
+        ->tag('ferienpass.filter.offer_list_type')
+    ;
+    $services->get(AgeType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(BaseType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(CategoryType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(EarliestDateType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(FavoritesType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(FeeType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(LatestDateType::class)->tag('ferienpass.filter.offer_list_type');
+    $services->get(NameType::class)->tag('ferienpass.filter.offer_list_type');
 
     // Tags by directory
     $services
