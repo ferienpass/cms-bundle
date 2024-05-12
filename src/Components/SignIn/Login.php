@@ -21,7 +21,7 @@ use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent]
+#[AsLiveComponent(route: 'live_component_cms')]
 class Login extends AbstractController
 {
     use ComponentWithFormTrait;

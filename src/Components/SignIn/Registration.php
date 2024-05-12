@@ -32,7 +32,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent]
+#[AsLiveComponent(route: 'live_component_cms')]
 class Registration extends AbstractController
 {
     use ComponentWithFormTrait;
