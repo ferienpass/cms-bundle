@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Ferienpass\CmsBundle\EventListener\Menu;
 
 use Richardhj\ContaoKnpMenuBundle\Event\FrontendMenuEvent;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Security\Core\Security;
 
 #[AsEventListener]
 class FrontendProtectedListener

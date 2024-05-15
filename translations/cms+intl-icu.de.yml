@@ -1,3 +1,9 @@
+user:
+  street: Straße + Hausnummer
+  postal: Postleitzahl
+  city: Ort
+  country: Land
+
 userAccount:
   participants: Teilnehmer:innen
   personal_data: Persönliche Daten

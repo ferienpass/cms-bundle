@@ -9,16 +9,47 @@
                     123:32.</p>
             </div>
 
-            {% if not showItems %}
-                <div class="mt-5">
-                    <button type="button"
-                            data-action="live#emit"
-                            data-live-event-param="wantsToPay"
-                            class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
-                        Teilnahmegebühren bezahlen
-                    </button>
+            {% if "address" == step %}
+
+                {{ form_start(form, {
+                    attr: {
+                        'data-action': 'live#action:prevent',
+                        'data-live-action-param': 'saveAddress'
+                    }
+                }) }}
+
+                <div>
+                    <div class="mt-6">
+                        <h2 class="text-lg leading-6 font-medium text-gray-900">Rechnungsanschrift</h2>
+                        <p class="mt-1 text-sm text-gray-500">Wir brauchen Ihre Anschrift zur Erstellung von Belegen für
+                            die
+                            Teilnahmegebühren.</p>
+                    </div>
+
+                    <div class="mt-6">
+
+                        <div class="grid gap-6 sm:grid-cols-7">
+                            <div class="sm:col-span-4">
+                                {{ form_row(form.street) }}
+                            </div>
+                            <div class="sm:col-span-2 sm:col-start-1">
+                                {{ form_row(form.postal) }}
+                            </div>
+                            <div class="sm:col-span-3">
+                                {{ form_row(form.city) }}
+                            </div>
+                            <div class="sm:col-span-2">
+                                {{ form_row(form.country) }}
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
-            {% else %}
+
+                {{ form_end(form) }}
+
+            {% elseif "select" == step %}
 
                 {% for participant in this.participants %}
                     {% set attendances = this.attendances|filter(a => a.participant == participant) %}
@@ -29,7 +60,8 @@
                             {% for attendance in attendances %}
                                 <div class="relative flex items-start py-4">
                                     <div class="min-w-0 flex-1 text-sm leading-6">
-                                        <label for="{{ "attendance-#{attendance.id}" }}" class="select-none flex justify-between">
+                                        <label for="{{ "attendance-#{attendance.id}" }}"
+                                               class="select-none flex justify-between">
                                             <span class="font-semibold text-gray-900">{{ attendance.offer.name }}</span>
                                             <span class="text-gray-700">{{ (attendance.offer.fee/100)|format_currency('EUR') }}</span>
                                         </label>
@@ -50,6 +82,17 @@
 
                 <div class="mt-5">
                     <button type="button"
+                            data-action="live#emit"
+                            data-live-event-param="proceedToAddress"
+                            class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
+                        {{ (this.totalAmount/100)|format_currency('EUR') }} bezahlen
+                    </button>
+                </div>
+
+            {% elseif "confirm" == step %}
+
+                <div class="">
+                    <button type="button"
                             data-action="live#action"
                             data-live-action-param="redirectToPay"
                             class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
@@ -57,6 +100,15 @@
                     </button>
                 </div>
 
+            {% else %}
+                <div class="mt-5">
+                    <button type="button"
+                            data-action="live#emit"
+                            data-live-event-param="proceedToSelect"
+                            class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
+                        Teilnahmegebühren bezahlen
+                    </button>
+                </div>
             {% endif %}
         </div>
     </div>

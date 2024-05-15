@@ -14,9 +14,14 @@ declare(strict_types=1);
 namespace Ferienpass\CmsBundle\Components;
 
 use BadOldesloe\Entity\Participant;
+use Doctrine\ORM\EntityManagerInterface;
+use Ferienpass\CmsBundle\Form\UserAddressType;
 use Ferienpass\CoreBundle\Entity\Attendance;
+use Ferienpass\CoreBundle\Payments\Provider\PaymentProviderInterface;
 use Ferienpass\CoreBundle\Repository\AttendanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -24,6 +29,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
+use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 
@@ -31,11 +37,12 @@ use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 class PayFees extends AbstractController
 {
     use ComponentToolsTrait;
+    use ComponentWithFormTrait;
     use DefaultActionTrait;
     use ValidatableComponentTrait;
 
     #[LiveProp]
-    public bool $showItems = false;
+    public ?string $step = null;
 
     #[LiveProp(writable: true)]
     #[Assert\NotBlank]
@@ -66,7 +73,7 @@ class PayFees extends AbstractController
         return array_values(array_intersect_key($participants, array_unique(array_map(fn (Participant $p) => $p->getId(), $participants))));
     }
 
-    public function selectedAttendances()
+    public function selectedAttendances(): array
     {
         $user = $this->getUser();
 
@@ -87,17 +94,49 @@ class PayFees extends AbstractController
         return array_sum(array_map(fn (Attendance $a) => $a->getOffer()->getFee(), $this->selectedAttendances()));
     }
 
-    #[LiveListener('wantsToPay')]
-    public function wantsToPay(): void
+    #[LiveListener('proceedToSelect')]
+    public function proceedToSelect(): void
     {
-        $this->showItems = true;
+        $this->step = 'select';
+    }
+
+    #[LiveListener('proceedToAddress')]
+    public function proceedToAddress(): void
+    {
+        $this->step = 'address';
+    }
+
+    #[LiveListener('proceedToConfirm')]
+    public function proceedToConfirm(): void
+    {
+        $this->step = 'confirm';
     }
 
     #[LiveAction]
-    public function redirectToPay(): Response
+    public function redirectToPay(PaymentProviderInterface $paymentProvider): Response
     {
         $this->validate();
 
-        return $this->redirectToRoute('app_random_number');
+        try {
+            return $this->redirect($paymentProvider->initializePayment($this->selectedAttendances(), $this->getUser()));
+        } catch (ClientException $e) {
+        }
+
+        return new Response();
+    }
+
+    #[LiveAction]
+    public function saveAddress(EntityManagerInterface $entityManager): void
+    {
+        $this->submitForm();
+
+        $entityManager->flush();
+
+        $this->proceedToConfirm();
+    }
+
+    protected function instantiateForm(): FormInterface
+    {
+        return $this->createForm(UserAddressType::class, $this->getUser());
     }
 }
