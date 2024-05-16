@@ -17,6 +17,7 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\ResponseException;
 use Contao\FilesModel;
 use Ferienpass\CmsBundle\Controller\AbstractController;
+use Ferienpass\CoreBundle\Entity\Offer\BaseOffer;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,8 @@ final class OfferDetailsController extends AbstractController
     private function getAttachments(OfferInterface $offer): array
     {
         $files = [];
-        if ($offer->getAgreementLetter()) {
+        /** @var BaseOffer $offer */
+        if ($offer->requiresApplication() && $offer->getAgreementLetter() && !$offer->isDeferAgreementLetter()) {
             $files[] = $offer->getAgreementLetter();
         }
 
