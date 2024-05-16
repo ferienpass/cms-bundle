@@ -62,9 +62,9 @@ final class ParticipantsController extends AbstractController
             return $this->redirectToRoute($request->attributes->get('_route'));
         }
 
-        foreach ($participants as $participant) {
-            $this->tagResponse('participant.' . $participant->getId());
-        }
+//        foreach ($participants as $participant) {
+//            $this->tagResponse('participant.' . $participant->getId());
+//        }
 
         return $this->render('@FerienpassCms/fragment/user_account/participants.html.twig', [
             'participants' => $originalParticipants,
