@@ -1,4 +1,9 @@
 user:
+  firstname: Vorname
+  lastname: Nachname
+  email: E-Mail-Adresse
+  phone: Telefonnummer
+  mobile: Handynummer
   street: Straße + Hausnummer
   postal: Postleitzahl
   city: Ort

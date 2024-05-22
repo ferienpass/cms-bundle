@@ -45,12 +45,12 @@ class AbstractContentPage extends AbstractController
             $pageBuilder->addFragment('main', new FragmentReference('ferienpass.fragment.article', ['id' => $articles->id]));
         }
 
-        $this->modifyPage($pageBuilder);
+        $this->modifyPage($pageBuilder, $request);
 
         return $pageBuilder->getResponse();
     }
 
-    protected function modifyPage(PageBuilder $pageBuilder): void
+    protected function modifyPage(PageBuilder $pageBuilder, Request $request): void
     {
     }
 }

@@ -1,0 +1,33 @@
+<div {{ attributes }} data-poll="check">
+
+    <div class="px-6 py-6">
+
+        {% if not payment.paid %}
+
+            {% if i < 10 %}
+                {% include '@FerienpassCms/partial/modal_loading.html.twig' with {
+                    headline: 'Zahlung empfangen…',
+                    text: 'Wir warten, bis der Zahlungsdienstleister uns die Zahlung bestätigt. Das sollte nur kurz dauern.'~(range(0, i)|reduce((carry) => carry ~'.')),
+                } %}
+            {% else %}
+                {% include '@FerienpassCms/partial/modal_error.html.twig' with {
+                    headline: 'Zahlung fehlgeschlagen',
+                    text: 'Wir können Ihre Zahlung derzeit nicht bestätigen. Bitte prüfen Sie, ob das Geld bei Ihnen bereits eingezogen wurde und probieren Sie ansonsten erneut.',
+                    href: path('applications'),
+                    linkText: 'Zurück zur Übersicht'
+                } %}
+            {% endif %}
+
+        {% else %}
+
+            {% include '@FerienpassCms/partial/modal_confirm.html.twig' with {
+                headline: 'Zahlung erfolgreich!',
+                text: 'Wir haben Ihre Zahlung i.H.v. '~((payment.totalAmount/100)|format_currency('EUR'))~' erhalten. Die Teilnahmegebühren sind damit bezahlt. Überprüfen Sie, ob ggf. weitere Zahlungen fällig sind.',
+                href: path('applications'),
+                linkText: 'Zurück zur Übersicht'
+            } %}
+
+        {% endif %}
+
+    </div>
+</div>

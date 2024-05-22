@@ -31,6 +31,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
+use Symfony\UX\LiveComponent\Metadata\UrlMapping;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 
 #[AsLiveComponent(route: 'live_component_cms')]
@@ -41,7 +42,7 @@ class PayFees extends AbstractController
     use DefaultActionTrait;
     use ValidatableComponentTrait;
 
-    #[LiveProp]
+    #[LiveProp(writable: true, url: new UrlMapping(as: 'step'))]
     public ?string $step = null;
 
     #[LiveProp(writable: true)]

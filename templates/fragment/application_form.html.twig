@@ -67,7 +67,7 @@
 
                             {# Not logged in #}
                             {% if not app.user and choices is empty and not (applicationSystem.task and ((not offer.fee and applicationSystem.task.allowAnonymous) or applicationSystem.task.allowAnonymousFee)) %}
-                                <p class="text-sm text-gray-500">Bitte erstellen Sie sich zunächst ein <strong
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Bitte erstellen Sie sich zunächst ein <strong
                                             class="font-medium">Benutzerkonto</strong> bzw. melden sich an. Sie
                                     profitieren von einem vereinfachten Anmeldeprozess.</p>
                                 <div class="mt-5">
@@ -86,7 +86,7 @@
                                             Zur Registrierung &amp; Anmeldung
                                         </a>
 
-                                        <p class="mt-2 text-sm text-gray-500">Ein Benutzerkonto ist sehr ratsam, wenn
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Ein Benutzerkonto ist sehr ratsam, wenn
                                             Sie mehrere Anmeldungen vornehmen möchten oder auch von anderen Geräten Ihre
                                             Anmeldungen verwalten möchten.</p>
                                     </div>
@@ -99,7 +99,7 @@
                                             Ohne Benutzerkonto fortfahren
                                         </button>
 
-                                        <p class="mt-2 text-sm text-gray-500">Sie können sich ohne Registrierung zum
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Sie können sich ohne Registrierung zum
                                             Angebot anmelden bei Angabe einer gültigen E-Mail-Adresse oder
                                             Handynummer.</p>
                                     </div>
@@ -138,7 +138,7 @@
                                 <div class="text-center">
                                     <span class="block mx-auto h-10 w-10 text-gray-400">{{ source('@FerienpassCore/Icons/user-add-outline.svg') }}</span>
                                     <h3 class="mt-2 text-sm font-medium text-gray-900">Keine Kinder gefunden</h3>
-                                    <p class="mt-1 text-sm text-gray-500">Wenn Sie ein Kind zu dem Angebot anmelden
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Wenn Sie ein Kind zu dem Angebot anmelden
                                         wollen, müssen Sie für das Kind ein Profil erstellen.</p>
                                     <div class="mt-6" x-show="!newParticipant">
                                         <button type="button"
@@ -184,10 +184,10 @@
                             {# New participant #}
                             <div class="mt-8 mb-4 bg-gray-50 sm:rounded-lg" x-show="newParticipant">
                                 <div class="px-4 py-5 sm:p-6">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900">Neue
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-50">Neue
                                         Teilnehmer:in</h3>
 
-                                    <div class="mt-2 mb-4 max-w-xl text-sm text-gray-500">
+                                    <div class="mt-2 mb-4 max-w-xl text-sm text-gray-500 dark:text-gray-400">
                                         {% if not app.user %}
                                             <p>Nach Absenden des Formulars müssen Sie die angegebene E-Mail-Adresse
                                                 bestätigen.</p>

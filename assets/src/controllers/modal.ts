@@ -42,6 +42,11 @@ export default class extends Controller {
     }
 
     show() {
+
+        if (!this.dialogTarget.classList.contains('sm:max-w-4xl') && !this.dialogTarget.classList.contains('sm:max-w-sm')) {
+            this.dialogTarget.classList.add('sm:max-w-4xl')
+        }
+
         this.dialogTarget.showModal();
         document.body.classList.add('overflow-hidden')
         enter(this.dialogTarget);
@@ -52,6 +57,19 @@ export default class extends Controller {
         this.dialogTarget.close()
 
         leave(this.dialogTarget)
+    }
 
+    open(event: CustomEvent) {
+        this.dynamicContentTarget.setAttribute('src', event.detail.url);
+
+        if (event.detail.rounded ?? false){
+        this.dialogTarget.classList.add('rounded-lg')
+        }
+
+        if ('sm' === (event.detail.size ?? null)) {
+            this.dialogTarget.classList.add('sm:max-w-sm')
+        }
+
+        this.show()
     }
 }

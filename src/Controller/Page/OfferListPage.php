@@ -16,11 +16,12 @@ namespace Ferienpass\CmsBundle\Controller\Page;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsPage;
 use Ferienpass\CmsBundle\Fragment\FragmentReference;
 use Ferienpass\CmsBundle\Page\PageBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AsPage('offer_list')]
 class OfferListPage extends AbstractContentPage
 {
-    protected function modifyPage(PageBuilder $pageBuilder): void
+    protected function modifyPage(PageBuilder $pageBuilder, Request $request): void
     {
         $pageBuilder->addFragment('main', new FragmentReference('ferienpass.fragment.offer_list'));
     }

@@ -100,6 +100,11 @@
                     </button>
                 </div>
 
+                {% elseif "checkPayment" == step %}
+
+                    <div x-data="" x-init="$nextTick(() => { $dispatch('modal:open', { url: 'https://localhost:8000/meine-anmeldungen?checkPayment=1', rounded: true, size: 'sm' }) })">
+                    </div>
+
             {% else %}
                 <div class="mt-5">
                     <button type="button"

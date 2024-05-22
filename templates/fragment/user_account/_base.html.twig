@@ -1,7 +1,7 @@
 {% trans_default_domain 'cms' %}
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="divide-y divide-gray-200 dark:divide-gray-800 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
         <aside class="py-6 lg:col-span-3">
             <nav class="space-y-1">
 
@@ -20,8 +20,8 @@
                     {% else %}
 
                         <a href="{{ item.uri }}"
-                           class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group border-l-4 px-3 py-2 flex items-center text-sm font-medium">
-                            <span class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6">{{ source('@FerienpassCore/Icons/'~item.extra('icon')~'.svg') }}</span>
+                           class="border-transparent text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 group border-l-4 px-3 py-2 flex items-center text-sm font-medium">
+                            <span class="text-gray-400 dark:text-gray-600 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6">{{ source('@FerienpassCore/Icons/'~item.extra('icon')~'.svg') }}</span>
                             <span class="truncate">{{ ('userAccount.'~item.name)|trans }}</span>
                         </a>
 

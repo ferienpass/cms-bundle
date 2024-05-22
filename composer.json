@@ -29,7 +29,7 @@
     "contao/faq-bundle": "^5.3@rc",
     "richardhj/contao-knp-menu": "^1.0",
     "richardhj/contao-theme-framework": "3.x-dev@dev",
-    "symfony/ux-live-component": "^2.0",
+    "symfony/ux-live-component": "^2.17",
     "symfony/stimulus-bundle": "^2.9"
   },
   "autoload": {
