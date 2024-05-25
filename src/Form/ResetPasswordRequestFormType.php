@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Ferienpass\CmsBundle\Form;
 
+use Ferienpass\CmsBundle\Form\SimpleType\ContaoRequestTokenType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -32,11 +34,21 @@ class ResetPasswordRequestFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('request_token', ContaoRequestTokenType::class)
+            ->add('submit', SubmitType::class, [
+                'label' => 'Passwort zurücksetzen',
+            ])
         ;
+
+        $builder->add('requestToken', ContaoRequestTokenType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'label_format' => 'user.%name%',
+            'translation_domain' => 'cms',
+            'csrf_protection' => false,
+        ]);
     }
 }

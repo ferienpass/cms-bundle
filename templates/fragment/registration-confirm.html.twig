@@ -1,4 +1,7 @@
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+{% extends '@FerienpassCms/fragment/_container.html.twig' %}
+
+{% block container %}
+
     <div class="md:flex py-10 lg:py-16">
         <div class="max-w-xs mx-auto md:max-w-full md:flex-1">
             <div class="md:transform md:-translate-x-16">
@@ -11,11 +14,14 @@
             <div class="text-xl text-gray-500">
                 <h1 class="mb-8">Prüfen Sie Ihre E-Mails</h1>
 
-                <p>Eine E-Mail zur Bestätigung wurde an <strong class="font-medium">{{ app.session.get('registration.email') }}</strong> gesendet.</p>
+                <p>Eine E-Mail zur Bestätigung wurde an <strong
+                            class="font-medium">{{ app.session.get('registration.email') }}</strong> gesendet.</p>
 
-                <p class="mt-2">Klicken Sie den Link in der E-Mail, um Ihren Account zu aktivieren und sich anmelden zu können.</p>
+                <p class="mt-2">Klicken Sie den Link in der E-Mail, um Ihren Account zu aktivieren und sich anmelden
+                    zu können.</p>
             </div>
 
         </div>
     </div>
-</div>
+
+{% endblock %}

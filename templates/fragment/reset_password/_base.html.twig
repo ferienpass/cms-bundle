@@ -31,22 +31,10 @@
             <div class="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
                 <div class="max-w-lg mx-auto lg:max-w-none">
                     <div class="max-w-sm">
-                        {{ form_start(form) }}
-                        {{ form_errors(form) }}
 
-                        <div class="space-y-6">
-                            {% if form.email is defined %}
-                                {{ form_row(form.email) }}
-                            {% endif %}
+                        {% block content %}
+                        {% endblock %}
 
-                            {% if form.password is defined %}
-                                {{ form_row(form.password) }}
-                            {% endif %}
-
-                            {{ form_rest(form) }}
-                        </div>
-
-                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>

@@ -1,7 +1,17 @@
+{% extends '@FerienpassCms/fragment/reset_password/_base.html.twig' %}
 
-    <p class="mt-2 text-sm leading-5 text-gray-600 _dark:text-gray-200 max-w">Wählen Sie ein neues Passwort.</p>
+{% block content %}
+
+    <h3 class="text-xl">Wählen Sie ein neues Passwort</h3>
+
+    <p class="mt-2 text-sm leading-5 text-gray-600 _dark:text-gray-200 max-w">Sie können sich anschließend mit Ihrem
+        neuen Passwort wieder anmelden.</p>
 
     {{ form_start(form) }}
-    {{ form_row(form.plainPassword) }}
-    <button class="btn btn-primary">Reset password</button>
+    <div class="space-y-6">
+        {{ form_row(form.plainPassword) }}
+        {{ form_row(form.submit) }}
+    </div>
     {{ form_end(form) }}
+
+{% endblock %}
