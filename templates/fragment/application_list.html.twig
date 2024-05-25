@@ -129,6 +129,8 @@
         </div>
     </div>
 
-    {#<twig:Cms:PayFees/>#}
+    {% for period in payDays %}
+        <twig:Cms:PayFees payDays="{{ period }}"/>
+    {% endfor %}
 
 </div>

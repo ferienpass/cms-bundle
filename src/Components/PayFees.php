@@ -13,16 +13,20 @@ declare(strict_types=1);
 
 namespace Ferienpass\CmsBundle\Components;
 
-use BadOldesloe\Entity\Participant;
 use Doctrine\ORM\EntityManagerInterface;
 use Ferienpass\CmsBundle\Form\UserAddressType;
 use Ferienpass\CoreBundle\Entity\Attendance;
+use Ferienpass\CoreBundle\Entity\EditionTask;
+use Ferienpass\CoreBundle\Entity\Participant\ParticipantInterface;
+use Ferienpass\CoreBundle\Entity\User;
 use Ferienpass\CoreBundle\Payments\Provider\PaymentProviderInterface;
 use Ferienpass\CoreBundle\Repository\AttendanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -42,6 +46,9 @@ class PayFees extends AbstractController
     use DefaultActionTrait;
     use ValidatableComponentTrait;
 
+    #[LiveProp]
+    public EditionTask $payDays;
+
     #[LiveProp(writable: true, url: new UrlMapping(as: 'step'))]
     public ?string $step = null;
 
@@ -49,7 +56,7 @@ class PayFees extends AbstractController
     #[Assert\NotBlank]
     public array $selectedItems = [];
 
-    public function __construct(private readonly AttendanceRepository $attendanceRepository)
+    public function __construct(private readonly AttendanceRepository $attendanceRepository, private readonly PaymentProviderInterface $paymentProvider)
     {
     }
 
@@ -71,7 +78,7 @@ class PayFees extends AbstractController
     {
         $participants = array_map(fn (Attendance $a) => $a->getParticipant(), $this->attendances());
 
-        return array_values(array_intersect_key($participants, array_unique(array_map(fn (Participant $p) => $p->getId(), $participants))));
+        return array_values(array_intersect_key($participants, array_unique(array_map(fn (ParticipantInterface $p) => $p->getId(), $participants))));
     }
 
     public function selectedAttendances(): array
@@ -114,16 +121,21 @@ class PayFees extends AbstractController
     }
 
     #[LiveAction]
-    public function redirectToPay(PaymentProviderInterface $paymentProvider): Response
+    public function redirectToPay(#[CurrentUser] User $user): Response
     {
         $this->validate();
 
-        try {
-            return $this->redirect($paymentProvider->initializePayment($this->selectedAttendances(), $this->getUser()));
-        } catch (ClientException $e) {
-        }
+        // try {
+        return $this->redirect($this->paymentProvider->initializePayment($this->selectedAttendances(), $user));
+        // } catch (ClientException $e) {
+        // }
 
         return new Response();
+    }
+
+    public function isRedirectSuccessful(Request $request): bool
+    {
+        return $this->paymentProvider->isRedirectSuccessful($request);
     }
 
     #[LiveAction]

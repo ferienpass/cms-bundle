@@ -20,6 +20,7 @@ use Ferienpass\CoreBundle\Entity\Attendance;
 use Ferienpass\CoreBundle\Entity\User;
 use Ferienpass\CoreBundle\Facade\AttendanceFacade;
 use Ferienpass\CoreBundle\Repository\AttendanceRepository;
+use Ferienpass\CoreBundle\Repository\EditionTaskRepository;
 use Ferienpass\CoreBundle\Ux\Flash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -30,7 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApplicationListController extends AbstractController
 {
-    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository)
+    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository, private readonly EditionTaskRepository $periods)
     {
     }
 
@@ -69,11 +70,14 @@ class ApplicationListController extends AbstractController
             $applicationSystems[$attendance->getId() ?? 0] = $this->applicationSystems->findApplicationSystem($attendance->getOffer());
         }
 
+        $payDays = $this->periods->currentPayDays();
+
         return $this->render('@FerienpassCms/fragment/application_list.html.twig', [
             'attendances' => $attendances,
             'withdraw' => array_map(fn (FormInterface $form) => $form->createView(), $forms),
             'prioritize' => array_map(fn (FormInterface $form) => $form->createView(), $prioritizeForms),
             'applicationSystems' => $applicationSystems,
+            'payDays' => $payDays,
         ]);
     }
 
