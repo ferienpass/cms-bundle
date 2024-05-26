@@ -7,6 +7,7 @@ const base = plugin(function ({addBase, theme}) {
             fontWeight: theme('fontWeight.bold'),
             lineHeight: theme('lineHeight.9'),
             color: theme('colors.gray.900'),
+            marginBottom: theme('spacing.6'),
             '@media (prefers-color-scheme: dark)': {
                 color: theme('colors.gray.50'),
             }
