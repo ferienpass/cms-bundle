@@ -18,12 +18,18 @@ use Doctrine\Persistence\ManagerRegistry;
 use Ferienpass\CmsBundle\Controller\AbstractController;
 use Ferienpass\CmsBundle\Form\ApplyFormParticipantType;
 use Ferienpass\CmsBundle\Form\ApplyFormType;
+use Ferienpass\CmsBundle\Form\SimpleType\ContaoRequestTokenType;
 use Ferienpass\CoreBundle\ApplicationSystem\ApplicationSystems;
+use Ferienpass\CoreBundle\Entity\AgreementLetterSignature;
+use Ferienpass\CoreBundle\Entity\Edition;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
 use Ferienpass\CoreBundle\Entity\Participant\ParticipantInterface;
+use Ferienpass\CoreBundle\Entity\User;
 use Ferienpass\CoreBundle\Facade\AttendanceFacade;
+use Ferienpass\CoreBundle\Repository\AgreementLetterSignaturesRepository;
 use Ferienpass\CoreBundle\Repository\AttendanceRepository;
 use Ferienpass\CoreBundle\Ux\Flash;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +38,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApplicationFormController extends AbstractController
 {
-    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository, private readonly ManagerRegistry $doctrine, private readonly OptIn $optIn, private readonly FormFactoryInterface $formFactory)
+    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository, private readonly ManagerRegistry $doctrine, private readonly OptIn $optIn, private readonly FormFactoryInterface $formFactory, private readonly AgreementLetterSignaturesRepository $signatures)
     {
     }
 
@@ -53,10 +59,25 @@ class ApplicationFormController extends AbstractController
             return $this->render('@FerienpassCms/fragment/application_form.html.twig', ['offer' => $offer]);
         }
 
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($offer->getEdition()->hasAgreementLetter() && null === $this->signatures->findValidForEdition($offer->getEdition())) {
+            $signForm = $this->formFactory->createNamedBuilder('sign')->add('requestToken', ContaoRequestTokenType::class)->add('submit', SubmitType::class, ['label' => 'Unterzeichnen'])->getForm();
+            $signForm->handleRequest($request);
+            if ($signForm->isSubmitted() && $signForm->isValid()) {
+                return $this->handleSign($user, $offer->getEdition(), $request);
+            }
+
+            /** @noinspection FormViewTemplate */
+            return $this->render('@FerienpassCms/fragment/application_form.html.twig', [
+                'offer' => $offer,
+                'signForm' => $signForm,
+            ]);
+        }
+
         $countParticipants = $this->attendanceRepository->count(['status' => 'confirmed', 'offer' => $offer]) + $this->attendanceRepository->count(['status' => 'waitlisted', 'offer' => $offer]);
         $vacant = $offer->getMaxParticipants() > 0 ? $offer->getMaxParticipants() - $countParticipants : null;
 
-        $user = $this->getUser();
         $allowAnonymous = (bool) $applicationSystem->getTask()?->isAllowAnonymous();
         $allowAnonymousFee = (bool) $applicationSystem->getTask()?->isAllowAnonymousFee();
         $participantForm = $this->formFactory->create(ApplyFormParticipantType::class, null, ['edition' => $applicationSystem->getTask()?->getEdition()]);
@@ -121,6 +142,16 @@ class ApplicationFormController extends AbstractController
             ->linkText('Zurück zum Angebot')
             ->create()
         );
+
+        return $this->redirect($request->getUri());
+    }
+
+    private function handleSign(User $user, Edition $edition, Request $request): Response
+    {
+        $signature = AgreementLetterSignature::fromEdition($edition, $user);
+
+        $this->doctrine->getManager()->persist($signature);
+        $this->doctrine->getManager()->flush();
 
         return $this->redirect($request->getUri());
     }
