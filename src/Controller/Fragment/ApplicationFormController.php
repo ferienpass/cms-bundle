@@ -61,7 +61,7 @@ class ApplicationFormController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        if ($offer->getEdition()->hasAgreementLetter() && null === $this->signatures->findValidForEdition($offer->getEdition())) {
+        if ($offer->getEdition()->hasAgreementLetter() && null === $this->signatures->findValidForEdition($offer->getEdition(), $user)) {
             $signForm = $this->formFactory->createNamedBuilder('sign')->add('requestToken', ContaoRequestTokenType::class)->add('submit', SubmitType::class, ['label' => 'Unterzeichnen'])->getForm();
             $signForm->handleRequest($request);
             if ($signForm->isSubmitted() && $signForm->isValid()) {
