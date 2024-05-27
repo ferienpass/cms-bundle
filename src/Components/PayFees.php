@@ -133,9 +133,9 @@ class PayFees extends AbstractController
         return new Response();
     }
 
-    public function isRedirectSuccessful(Request $request): bool
+    public function interpretRedirect(Request $request): int
     {
-        return $this->paymentProvider->isRedirectSuccessful($request);
+        return $this->paymentProvider->interpretRedirect($request);
     }
 
     #[LiveAction]

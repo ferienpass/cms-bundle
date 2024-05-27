@@ -172,13 +172,25 @@
 
             {% elseif "checkPayment" == step %}
 
-                {% if this.isRedirectSuccessful(app.request) %}
+                {% set status = this.interpretRedirect(app.request) %}
+                {% if 1 == status %}
 
                     <div x-data=""
                          x-init="$nextTick(() => { $dispatch('modal:open', { url: '{{ path('applications', {checkPayment: 1}) }}', rounded: true, size: 'sm' }) })">
                     </div>
 
                     <p class="text-sm text-gray-500">Zahlung wird verarbeitet …</p>
+
+                {% elseif 2 == status %}
+
+                    <div class="max-w-sm mx-auto">
+                        {% include '@FerienpassCms/partial/modal_confirm.html.twig' with {
+                            headline: 'Zahlung getätigt!',
+                            text: 'Sie haben eine Zahlung i.H.v. '~((payment.totalAmount/100)|format_currency('EUR'))~' getätitgt. Wir warten noch, bis die Bank uns die Zahlung bestätigt. Erstmal gibt es nichts Weiteres zu tun. Überprüfen Sie, ob ggf. weitere Zahlungen fällig sind.',
+                            href: path('applications'),
+                            linkText: 'Zurück zur Übersicht'
+                        } %}
+                    </div>
 
                 {% else %}
 
@@ -203,9 +215,7 @@
                         endet
                         am {{ payDays.periodEnd|format_datetime('long') }}.</p>
                     <p class="mt-2 text-gray-500">Sie zahlen die Teilnahmegebühren mit unserem Zahlungsanbieter
-                        „pmPayment“.
-                        Ihnen stehen folgende Zahlungsarten zur Verfügung: PayPal, giropay, Lastschrift,
-                        Kreditkarte</p>
+                        „pmPayment“. Ihnen stehen folgende Zahlungsarten zur Verfügung: giropay, Lastschrift</p>
                 </div>
 
                 <div class="mt-5">
