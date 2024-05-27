@@ -186,7 +186,7 @@
                     <div class="max-w-sm mx-auto">
                         {% include '@FerienpassCms/partial/modal_confirm.html.twig' with {
                             headline: 'Zahlung getätigt!',
-                            text: 'Sie haben eine Zahlung i.H.v. '~((payment.totalAmount/100)|format_currency('EUR'))~' getätitgt. Wir warten noch, bis die Bank uns die Zahlung bestätigt. Erstmal gibt es nichts Weiteres zu tun. Überprüfen Sie, ob ggf. weitere Zahlungen fällig sind.',
+                            text: 'Sie haben eine Zahlung getätitgt. Wir warten noch, bis die Bank uns die Zahlung bestätigt. Erstmal gibt es aber nichts Weiteres zu tun. Überprüfen Sie, ob ggf. weitere Zahlungen fällig sind.',
                             href: path('applications'),
                             linkText: 'Zurück zur Übersicht'
                         } %}
