@@ -6,31 +6,31 @@
                 <button
                         data-action="live#emit"
                         data-live-event-param="proceedToSelect"
-                        class="group block w-full text-left flex flex-col border-l-4 py-2 pl-4 {{ ('select' == current or 'address' == current or 'confirm' == current) ? 'border-primary-600 hover:border-primary-800' : 'border-gray-200 hover:border-gray-300' }} md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                    <span class="text-sm font-medium {{ ('select' == current or 'address' == current or 'confirm' == current) ? 'text-primary-600 group-hover:text-primary-800' : 'text-gray-500 group-hover:text-gray-700' }}">Schritt
+                        class="group block w-full text-left flex flex-col border-l-4 py-2 pl-4 {{ ('select' == current or 'address' == current or 'confirm' == current) ? 'border-primary-600 dark:border-primary-300 hover:border-primary-800 dark:hover:border-primary-400' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }} md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                    <span class="text-sm font-medium {{ ('select' == current or 'address' == current or 'confirm' == current) ? 'text-primary-600 dark:text-primary-300 group-hover:text-primary-800 dark:group-hover:text-primary-400' : 'text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-400' }}">Schritt
                         1</span>
-                    <span class="text-sm font-medium">Angebote zur Zahlung auswählen</span>
+                    <span class="text-sm font-medium text-black dark:text-gray-300">Angebote zur Zahlung auswählen</span>
                 </button>
             </li>
             <li class="md:flex-1">
                 <button
                         data-action="live#emit"
                         data-live-event-param="proceedToAddress"
-                        class="group block w-full text-left flex flex-col border-l-4 {{ ('address' == current or 'confirm' == current) ? 'border-primary-600 hover:border-primary-800' : 'border-gray-200 hover:border-gray-300' }} py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                        class="group block w-full text-left flex flex-col border-l-4 {{ ('address' == current or 'confirm' == current) ? 'border-primary-600 dark:border-primary-300 hover:border-primary-800 dark:hover:border-primary-400' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }} py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
                         aria-current="step">
-                    <span class="text-sm font-medium {{ ('address' == current or 'confirm' == current) ? 'text-primary-600 group-hover:text-primary-800': 'text-gray-500 group-hover:text-gray-700' }}">Schritt
+                    <span class="text-sm font-medium {{ ('address' == current or 'confirm' == current) ? 'text-primary-600 dark:text-primary-300 group-hover:text-primary-800 dark:group-hover:text-primary-400': 'text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-400' }}">Schritt
                         2</span>
-                    <span class="text-sm font-medium">Rechnungsadresse eingeben</span>
+                    <span class="text-sm font-medium text-black dark:text-gray-300">Rechnungsadresse eingeben</span>
                 </button>
             </li>
             <li class="md:flex-1">
                 <button
                         data-action="live#emit"
                         data-live-event-param="proceedToConfirm"
-                        class="group block w-full text-left flex flex-col border-l-4 py-2 pl-4 {{ ('confirm' == current) ? 'border-primary-600 hover:border-primary-800' : 'border-gray-200 hover:border-gray-300' }} md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                    <span class="text-sm font-medium {{ ('confirm' == current) ? 'text-primary-600 group-hover:text-primary-800' : 'text-gray-500 group-hover:text-gray-700' }}">Schritt
+                        class="group block w-full text-left flex flex-col border-l-4 py-2 pl-4 {{ ('confirm' == current) ? 'border-primary-600 dark:border-primary-300 hover:border-primary-800 dark:hover:border-primary-400' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }} md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                    <span class="text-sm font-medium {{ ('confirm' == current) ? 'text-primary-600 dark:text-primary-300 group-hover:text-primary-800 dark:group-hover:text-primary-400' : 'text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-400' }}">Schritt
                         3</span>
-                    <span class="text-sm font-medium">Eingaben prüfen</span>
+                    <span class="text-sm font-medium text-black dark:text-gray-300">Eingaben prüfen</span>
                 </button>
             </li>
         </ol>
@@ -50,8 +50,8 @@
                 {{ _self.steps(step) }}
 
                 <div class="mt-12">
-                    <h2 class="text-lg leading-6 font-medium text-gray-900">Angebote zur Zahlung auswählen</h2>
-                    <p class="mt-1 text-sm text-gray-500">Wählen Sie die Angebote aus, die Sie jetzt buchen wollen.
+                    <h2 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Angebote zur Zahlung auswählen</h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-200">Wählen Sie die Angebote aus, die Sie jetzt buchen wollen.
                         Angebote, die Sie jetzt nicht buchen, können Sie innerhalb der Frist später bezahlen, werden
                         aber nach der Frist storniert.</p>
                 </div>
@@ -60,15 +60,15 @@
                     {% set attendances = this.attendances|filter(a => a.participant == participant) %}
 
                     <fieldset class="mt-8">
-                        <legend class="text-base font-semibold leading-6 text-gray-900">{{ participant.name }}</legend>
-                        <div class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+                        <legend class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ participant.name }}</legend>
+                        <div class="mt-4 divide-y divide-gray-200 dark:divide-gray-800 border-b border-t border-gray-200 dark:border-gray-800">
                             {% for attendance in attendances %}
                                 <div class="relative flex items-start py-4">
                                     <div class="min-w-0 flex-1 text-sm leading-6">
                                         <label for="{{ "attendance-#{attendance.id}" }}"
                                                class="select-none flex justify-between">
-                                            <span class="font-semibold text-gray-900">{{ attendance.offer.name }}</span>
-                                            <span class="text-gray-700">{{ (attendance.offer.fee/100)|format_currency('EUR') }}</span>
+                                            <span class="font-semibold text-gray-900 dark:text-gray-50">{{ attendance.offer.name }}</span>
+                                            <span class="text-gray-700 dark:text-gray-200">{{ (attendance.offer.fee/100)|format_currency('EUR') }}</span>
                                         </label>
                                     </div>
                                     <div class="ml-3 flex h-6 items-center">
@@ -85,7 +85,7 @@
 
                 {% endfor %}
 
-                <p class="mt-6 font-bold text-orange-700 text-base">Sie
+                <p class="mt-6 font-bold text-orange-700 dark:text-orange-400 text-base">Sie
                     bezahlen {{ (this.totalAmount/100)|format_currency('EUR') }}.</p>
 
                 <div class="mt-5">
@@ -110,8 +110,8 @@
 
                 <div>
                     <div class="mt-12">
-                        <h2 class="text-lg leading-6 font-medium text-gray-900">Rechnungsadresse eingeben</h2>
-                        <p class="mt-1 text-sm text-gray-500">Wir brauchen Ihre Anschrift für die Erstellung des
+                        <h2 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Rechnungsadresse eingeben</h2>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-200">Wir brauchen Ihre Anschrift für die Erstellung des
                             Zahlungsbelegs.</p>
                     </div>
 
@@ -146,12 +146,12 @@
                 {{ _self.steps(step) }}
 
                 <div class="mt-12">
-                    <h2 class="text-lg leading-6 font-medium text-gray-900">Eingaben prüfen</h2>
-                    <p class="mt-1 text-sm text-gray-500">Sie werden im nächsten Schritt zur Bezahlung
+                    <h2 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Eingaben prüfen</h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-200">Sie werden im nächsten Schritt zur Bezahlung
                         weitergeleitet.</p>
                 </div>
 
-                <div class="mt-6 text-gray-700 space-y-1">
+                <div class="mt-6 text-gray-700 dark:text-gray-300 space-y-1">
                     <p><span class="font-medium">Angebote bezahlen</span> {{ this.selectedAttendances|length }} Angebote
                     </p>
                     <p><span class="font-medium">Zahlbetrag:</span> {{ (this.totalAmount/100)|format_currency('EUR') }}
@@ -202,19 +202,19 @@
 
             {% else %}
 
-                <h3 class="text-lg font-bold leading-6 text-gray-900">{{ payDays.edition.name }}: <span
+                <h3 class="text-lg font-bold leading-6 text-gray-900 dark:text-gray-50">{{ payDays.edition.name }}: <span
                             class="font-medium">Teilnahmegebühren
                         jetzt bezahlen</span></h3>
 
                 <div class="mt-2 text-sm">
-                    <p class="text-gray-700">Bitte bedenken Sie, dass Sie die Teilnahmegebühren im Vornherein
+                    <p class="text-gray-700 dark:text-gray-200">Bitte bedenken Sie, dass Sie die Teilnahmegebühren im Vornherein
                         bezahlen
                         müssen, da die Anmeldungen
                         andernfalls storniert werden.</p>
-                    <p class="mt-2 font-semibold text-orange-700">Die Frist zur Bezahlung der Teilnahmegebühren
+                    <p class="mt-2 font-semibold text-orange-700 dark:text-orange-400">Die Frist zur Bezahlung der Teilnahmegebühren
                         endet
                         am {{ payDays.periodEnd|format_datetime('long') }}.</p>
-                    <p class="mt-2 text-gray-500">Sie zahlen die Teilnahmegebühren mit unserem Zahlungsanbieter
+                    <p class="mt-2 text-gray-500 dark:text-gray-300">Sie zahlen die Teilnahmegebühren mit unserem Zahlungsanbieter
                         „pmPayment“. Ihnen stehen folgende Zahlungsarten zur Verfügung: giropay, Lastschrift</p>
                 </div>
 
