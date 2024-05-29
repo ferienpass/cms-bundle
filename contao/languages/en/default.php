@@ -33,16 +33,13 @@ $GLOBALS['TL_LANG']['MSC']['application_list']['privacy_statement_missing'] = 'Y
 
 $GLOBALS['TL_LANG']['MSC']['ferienpass_code_invalid'] = 'The code you\'ve entered is invalid or already in use.';
 
-$GLOBALS['TL_LANG']['PTY']['account_deleted'][0] = 'Eltern-Portal - Bestätigungsseite Account-Löschung';
-$GLOBALS['TL_LANG']['PTY']['host_details'][0] = 'Eltern-Portal - Veranstalter-Profil';
-$GLOBALS['TL_LANG']['PTY']['offer_details'][0] = 'Eltern-Portal - Angebotsseite';
-$GLOBALS['TL_LANG']['PTY']['offer_list'][0] = 'Eltern-Portal - Angebotsliste';
-$GLOBALS['TL_LANG']['PTY']['personal_data'][0] = 'Eltern-Portal - Persönliche Daten';
-$GLOBALS['TL_LANG']['PTY']['registration_confirm'][0] = 'Eltern-Portal - Bestätigungsseite Registrierung';
-$GLOBALS['TL_LANG']['PTY']['registration_welcome'][0] = 'Eltern-Portal - Willkommensseite nach Registrierung';
-$GLOBALS['TL_LANG']['PTY']['registration_activate'][0] = 'Eltern-Portal - Aktivierungsseite Nutzeraccount';
-$GLOBALS['TL_LANG']['PTY']['user_account'][0] = 'Eltern-Portal - Account & Sicherheit';
-$GLOBALS['TL_LANG']['PTY']['applications'][0] = 'Eltern-Portal - Anmeldungen';
-$GLOBALS['TL_LANG']['PTY']['notifications'][0] = 'Eltern-Portal - Benachrichtigungen';
-$GLOBALS['TL_LANG']['PTY']['lost_password'][0] = 'Eltern-Portal - Passwort zurücksetzen';
-$GLOBALS['TL_LANG']['PTY']['lost_password_confirm'][0] = 'Eltern-Portal - Bestätigungsseite Passwort zurücksetzen';
+$GLOBALS['TL_LANG']['PTY']['offer_list'][0] = 'Angebotsseite';
+$GLOBALS['TL_LANG']['PTY']['applications'][0] = 'Anmeldungen';
+$GLOBALS['TL_LANG']['PTY']['offer_details'][0] = 'Detailseite Angebot';
+$GLOBALS['TL_LANG']['PTY']['host_details'][0] = 'Detailseite Veranstalter';
+$GLOBALS['TL_LANG']['PTY']['user_account'][0] = 'Account & Sicherheit';
+$GLOBALS['TL_LANG']['PTY']['registration_confirm'][0] = 'Registrierung > Bestätigungsseite';
+$GLOBALS['TL_LANG']['PTY']['registration_welcome'][0] = 'Registrierung > Willkommensseite';
+$GLOBALS['TL_LANG']['PTY']['registration_activate'][0] = 'Registrierung > Aktivierungsseite';
+$GLOBALS['TL_LANG']['PTY']['account_deleted'][0] = 'Account-Löschung Bestätigungsseite';
+$GLOBALS['TL_LANG']['PTY']['lost_password'][0] = 'Passwort zurücksetzen';
