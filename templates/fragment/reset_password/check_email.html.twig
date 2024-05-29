@@ -4,13 +4,13 @@
 
     <h3 class="text-xl">Überprüfen Sie Ihre E-Mails</h3>
 
-    <p class="mt-2 text-gray-700 leading-tight">
+    <p class="mt-2 text-gray-600 dark:text-gray-200 leading-tight">
         Wenn ein Konto existiert, das mit Ihrer E-Mail-Adresse übereinstimmt, wurde soeben eine E-Mail mit einem Link
         verschickt, den Sie verwenden können, um Ihr Passwort zurückzusetzen.
         Dieser Link wird ablaufen
         {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
     </p>
-    <p class="mt-2 text-gray-500 text-sm">Wenn Sie keine E-Mail erhalten, überprüfen Sie bitte Ihren Spam-Ordner oder <a
+    <p class="mt-2 text-gray-500 dark:text-gray-300 text-sm">Wenn Sie keine E-Mail erhalten, überprüfen Sie bitte Ihren Spam-Ordner oder <a
                 class="underline hover:no-underline" href="{{ path('lost_password') }}">versuchen Sie es
             erneut</a>.</p>
 
