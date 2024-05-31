@@ -48,9 +48,8 @@ final class CloseAccount extends AbstractController
 
         if ($request->isMethod('POST') && 'close_account' === $request->request->get('FORM_SUBMIT')) {
             if ($this->passwordHasher->isPasswordValid($user, $request->request->get('password'))) {
-                $this->messageBus->dispatch(new AccountDelete($user->getId()));
-
                 $this->security->logout();
+                $this->messageBus->dispatch(new AccountDelete($user->getId()));
 
                 return $this->redirectToRoute('account_deleted');
             }
