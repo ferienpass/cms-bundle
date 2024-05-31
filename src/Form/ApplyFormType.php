@@ -159,7 +159,7 @@ class ApplyFormType extends AbstractType
         $repo = $this->doctrine->getRepository(OfferDate::class);
 
         // All dates of offers the participant is participating (expect current offer)
-        /** @var iterable<int, OfferDate> $participatingDates */
+        /** @var OfferDate[] $participatingDates */
         $participatingDates = $repo->createQueryBuilder('d')
             ->innerJoin(OfferInterface::class, 'o', Join::WITH, 'o.id = d.offer')
             ->innerJoin(Attendance::class, 'a', Join::WITH, 'a.offer = o.id')
@@ -174,6 +174,8 @@ class ApplyFormType extends AbstractType
             ->getQuery()
             ->getResult()
         ;
+
+        $participatingDates = array_filter($participatingDates, fn (OfferDate $d) => $d->getBegin() && $d->getEnd() && $d->getEnd()->diff($d->getBegin())->h <= 8);
 
         // Walk every date the participant is already attending to…
         foreach ($offer->getDates() as $currentDate) {
