@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class HostDetailsController extends AbstractController
 {
-    public function __construct(private readonly OfferRepositoryInterface $offerRepository, private readonly EditionRepository $editionRepository)
+    public function __construct(private readonly OfferRepositoryInterface $offers, private readonly EditionRepository $editions)
     {
     }
 
@@ -39,9 +39,9 @@ final class HostDetailsController extends AbstractController
 
     private function fetchOffers(Host $host): ?array
     {
-        $editions = $this->editionRepository->findWithActiveTask('show_offers');
+        $editions = $this->editions->findWithActiveTask('show_offers');
 
-        $qb = $this->offerRepository->createQueryBuilder('o')
+        $qb = $this->offers->createQueryBuilder('o')
             ->leftJoin('o.dates', 'dates')
             ->innerJoin('o.hosts', 'hosts')
             ->andWhere('hosts.id = :host')->setParameter('host', $host->getId(), Types::INTEGER)

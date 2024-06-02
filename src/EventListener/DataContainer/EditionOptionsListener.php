@@ -19,7 +19,7 @@ use Ferienpass\CoreBundle\Repository\EditionRepository;
 
 class EditionOptionsListener
 {
-    public function __construct(private readonly EditionRepository $repository)
+    public function __construct(private readonly EditionRepository $editions)
     {
     }
 
@@ -27,7 +27,7 @@ class EditionOptionsListener
     public function onOptionsCallback(): array
     {
         /** @var Edition[] $editions */
-        $editions = $this->repository->findBy([], ['name' => 'ASC']);
+        $editions = $this->editions->findBy([], ['name' => 'ASC']);
 
         $options = [];
         foreach ($editions as $edition) {

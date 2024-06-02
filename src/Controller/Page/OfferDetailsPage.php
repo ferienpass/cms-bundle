@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\Response;
 #[AsPage('offer_details', path: '{alias}', contentComposition: false)]
 class OfferDetailsPage extends AbstractController
 {
-    public function __invoke(string $alias, OfferRepositoryInterface $offerRepository, Request $request): Response
+    public function __invoke(string $alias, OfferRepositoryInterface $offers, Request $request): Response
     {
-        if (null === $offer = $offerRepository->findByAlias($alias)) {
+        if (null === $offer = $offers->findByAlias($alias)) {
             throw new PageNotFoundException();
         }
 

@@ -56,7 +56,7 @@ class PayFees extends AbstractController
     #[Assert\NotBlank]
     public array $selectedItems = [];
 
-    public function __construct(private readonly AttendanceRepository $attendanceRepository, private readonly PaymentProviderInterface $paymentProvider)
+    public function __construct(private readonly AttendanceRepository $attendances, private readonly PaymentProviderInterface $paymentProvider)
     {
     }
 
@@ -64,7 +64,7 @@ class PayFees extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->attendanceRepository->createQueryBuilder('attendance')
+        return $this->attendances->createQueryBuilder('attendance')
             ->select('attendance', 'participant')
             ->innerJoin('attendance.participant', 'participant')
             ->where('participant.user = :user')
@@ -85,7 +85,7 @@ class PayFees extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->attendanceRepository->createQueryBuilder('attendance')
+        return $this->attendances->createQueryBuilder('attendance')
             ->select('attendance', 'participant')
             ->innerJoin('attendance.participant', 'participant')
             ->where('participant.user = :user')

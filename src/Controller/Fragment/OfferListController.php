@@ -31,19 +31,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 final class OfferListController extends AbstractController
 {
-    public function __construct(private readonly EditionRepository $editionRepository, private readonly OfferRepositoryInterface $offerRepository, private readonly OfferListFilterFactory $filterFactory, private readonly FormFactoryInterface $formFactory)
+    public function __construct(private readonly EditionRepository $editions, private readonly OfferRepositoryInterface $offers, private readonly OfferListFilterFactory $filterFactory, private readonly FormFactoryInterface $formFactory)
     {
     }
 
     public function __invoke(Request $request, Session $session): Response
     {
-        $qb = $this->offerRepository->createQueryBuilder('o')->where('o.state = :state_published')->setParameter('state_published', OfferInterface::STATE_PUBLISHED);
-        $hasEditions = $this->editionRepository->count([]) > 0;
+        $qb = $this->offers->createQueryBuilder('o')->where('o.state = :state_published')->setParameter('state_published', OfferInterface::STATE_PUBLISHED);
+        $hasEditions = $this->editions->count([]) > 0;
         $pageModel = $request->attributes->get('pageModel');
         if ($pageModel->edition) {
-            $edition = $this->editionRepository->find($pageModel->edition);
+            $edition = $this->editions->find($pageModel->edition);
         } else {
-            $edition = $this->editionRepository->findOneToShow($pageModel);
+            $edition = $this->editions->findOneToShow($pageModel);
         }
 
         if ($hasEditions && null !== $edition) {

@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ParticipantsController extends AbstractController
 {
-    public function __construct(private readonly ParticipantRepositoryInterface $repository, private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly ParticipantRepositoryInterface $participants, private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -43,7 +43,7 @@ final class ParticipantsController extends AbstractController
         }
 
         // TODO if originalParticipants.length eq 0 then add constraint {MinLength=1}
-        $originalParticipants = $this->repository->findBy(['user' => $user]);
+        $originalParticipants = $this->participants->findBy(['user' => $user]);
         $form = $this->createForm(UserParticipantsType::class);
 
         $form->handleRequest($request);
@@ -74,7 +74,7 @@ final class ParticipantsController extends AbstractController
 
     private function edit(int $id, Request $request): Response
     {
-        $participant = $this->repository->find($id);
+        $participant = $this->participants->find($id);
         if (null === $participant) {
             throw new PageNotFoundException();
         }

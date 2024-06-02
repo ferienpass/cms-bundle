@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApplicationFormController extends AbstractController
 {
-    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository, private readonly ManagerRegistry $doctrine, private readonly OptIn $optIn, private readonly FormFactoryInterface $formFactory, private readonly AgreementLetterSignaturesRepository $signatures)
+    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendances, private readonly ManagerRegistry $doctrine, private readonly OptIn $optIn, private readonly FormFactoryInterface $forms, private readonly AgreementLetterSignaturesRepository $signatures)
     {
     }
 
@@ -62,7 +62,7 @@ class ApplicationFormController extends AbstractController
         /** @var User|null $user */
         $user = $this->getUser();
         if ($offer->getEdition()->hasAgreementLetter() && null !== $user && null === $this->signatures->findValidForEdition($offer->getEdition(), $user)) {
-            $signForm = $this->formFactory->createNamedBuilder('sign')->add('requestToken', ContaoRequestTokenType::class)->add('submit', SubmitType::class, ['label' => 'Unterzeichnen'])->getForm();
+            $signForm = $this->forms->createNamedBuilder('sign')->add('requestToken', ContaoRequestTokenType::class)->add('submit', SubmitType::class, ['label' => 'Unterzeichnen'])->getForm();
             $signForm->handleRequest($request);
             if ($signForm->isSubmitted() && $signForm->isValid()) {
                 return $this->handleSign($user, $offer->getEdition(), $request);
@@ -75,13 +75,13 @@ class ApplicationFormController extends AbstractController
             ]);
         }
 
-        $countParticipants = $this->attendanceRepository->count(['status' => 'confirmed', 'offer' => $offer]) + $this->attendanceRepository->count(['status' => 'waitlisted', 'offer' => $offer]);
+        $countParticipants = $this->attendances->count(['status' => 'confirmed', 'offer' => $offer]) + $this->attendances->count(['status' => 'waitlisted', 'offer' => $offer]);
         $vacant = $offer->getMaxParticipants() > 0 ? $offer->getMaxParticipants() - $countParticipants : null;
 
         $allowAnonymous = (bool) $applicationSystem->getTask()?->isAllowAnonymous();
         $allowAnonymousFee = (bool) $applicationSystem->getTask()?->isAllowAnonymousFee();
-        $participantForm = $this->formFactory->create(ApplyFormParticipantType::class, null, ['edition' => $applicationSystem->getTask()?->getEdition()]);
-        $applicationForm = $this->formFactory->create(ApplyFormType::class, null, [
+        $participantForm = $this->forms->create(ApplyFormParticipantType::class, null, ['edition' => $applicationSystem->getTask()?->getEdition()]);
+        $applicationForm = $this->forms->create(ApplyFormType::class, null, [
             'offer' => $offer,
             'application_system' => $applicationSystem,
         ]);

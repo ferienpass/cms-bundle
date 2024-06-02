@@ -26,13 +26,13 @@ use Symfony\Component\HttpFoundation\Response;
 #[AsContentElement(type: 'countdown', category: 'ferienpass')]
 class CountdownController extends AbstractContentElementController
 {
-    public function __construct(private readonly EditionRepository $editionRepository)
+    public function __construct(private readonly EditionRepository $editions)
     {
     }
 
     protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
-        $passEdition = $this->editionRepository->findOneClosestByTask('show_offers');
+        $passEdition = $this->editions->findOneClosestByTask('show_offers');
         if (null === $passEdition) {
             return new Response('Fehler. Zeitraum nicht festgelegt.');
         }

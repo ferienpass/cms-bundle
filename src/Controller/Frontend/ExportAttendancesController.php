@@ -31,9 +31,9 @@ class ExportAttendancesController extends AbstractController
     }
 
     #[Route(path: '/anmeldungen-{memberId}-{token}.{_format}', requirements: ['memberId' => '\d+'], defaults: ['format' => 'ics'])]
-    public function __invoke(int $memberId, string $token, string $_format, Request $request, ICalExport $iCal, UserRepository $userRepository, OfferRepositoryInterface $offerRepository)
+    public function __invoke(int $memberId, string $token, string $_format, Request $request, ICalExport $iCal, UserRepository $users, OfferRepositoryInterface $offers)
     {
-        $user = $userRepository->find($memberId);
+        $user = $users->find($memberId);
         if (null === $user) {
             throw $this->createNotFoundException();
         }
@@ -48,7 +48,7 @@ class ExportAttendancesController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $offers = $offerRepository->createQueryBuilder('o')
+        $items = $offers->createQueryBuilder('o')
             ->innerJoin('o.attendances', 'a')
             ->innerJoin('p.participants', 'p')
             ->where('p.user = :user')
@@ -57,7 +57,7 @@ class ExportAttendancesController extends AbstractController
             ->getResult()
         ;
 
-        $response = new BinaryFileResponse($iCal->generate($offers));
+        $response = new BinaryFileResponse($iCal->generate($items));
         $response->headers->set('Content-Type', 'text/calendar');
 
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'cal.ics');

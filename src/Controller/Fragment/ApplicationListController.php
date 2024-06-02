@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApplicationListController extends AbstractController
 {
-    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendanceRepository, private readonly EditionTaskRepository $periods)
+    public function __construct(private readonly ApplicationSystems $applicationSystems, private readonly AttendanceFacade $attendanceFacade, private readonly AttendanceRepository $attendances, private readonly EditionTaskRepository $periods)
     {
     }
 
@@ -43,7 +43,7 @@ class ApplicationListController extends AbstractController
         }
 
         /** @var Collection<int, Attendance> $attendances */
-        $attendances = $this->attendanceRepository->createQueryBuilder('a')
+        $attendances = $this->attendances->createQueryBuilder('a')
             ->innerJoin('a.participant', 'p')
             ->where('p.user = :member')
             ->setParameter('member', $user->getId())
@@ -140,7 +140,7 @@ class ApplicationListController extends AbstractController
             return null;
         }
 
-        $attendance = $this->attendanceRepository->find($form->get('id')->getData());
+        $attendance = $this->attendances->find($form->get('id')->getData());
         if (!$attendance instanceof Attendance) {
             return $this->redirectToRoute($request->attributes->get('_route'));
         }
@@ -168,7 +168,7 @@ class ApplicationListController extends AbstractController
             return null;
         }
 
-        $attendance = $this->attendanceRepository->find($form->get('id')->getData());
+        $attendance = $this->attendances->find($form->get('id')->getData());
         if (!$attendance instanceof Attendance || !$attendance->isWaiting()) {
             return $this->redirectToRoute($request->attributes->get('_route'));
         }

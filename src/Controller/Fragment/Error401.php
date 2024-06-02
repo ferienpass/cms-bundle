@@ -20,14 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Error401 extends AbstractController
 {
-    public function __construct(private readonly EditionRepository $ferienpassRepository)
+    public function __construct(private readonly EditionRepository $editions)
     {
     }
 
     public function __invoke(Request $request): Response
     {
         // If no Ferienpass active, show error message, otherwise forward to sign-in fragment
-        if ($this->ferienpassRepository->count([]) && null === $this->ferienpassRepository->findOneToShow()) {
+        if ($this->editions->count([]) && null === $this->editions->findOneToShow()) {
             return $this->render('@FerienpassCms/fragment/error401.html.twig');
         }
 

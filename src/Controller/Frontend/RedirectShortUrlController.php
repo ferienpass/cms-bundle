@@ -24,10 +24,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/{id}', requirements: ['id' => '\d+'], defaults: ['_scope' => ContaoCoreBundle::SCOPE_FRONTEND])]
 class RedirectShortUrlController extends AbstractController
 {
-    public function __invoke(int $id, OfferRepositoryInterface $repository)
+    public function __invoke(int $id, OfferRepositoryInterface $offers)
     {
         /** @var OfferInterface $offer */
-        $offer = $repository->find($id);
+        $offer = $offers->find($id);
         if (null === $offer) {
             throw new PageNotFoundException();
         }

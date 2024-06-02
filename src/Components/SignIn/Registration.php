@@ -41,7 +41,7 @@ class Registration extends AbstractController
     #[LiveProp]
     public User $initialFormData;
 
-    public function __construct(private readonly ParticipantRepositoryInterface $participantRepository)
+    public function __construct(private readonly ParticipantRepositoryInterface $participants)
     {
         $this->initialFormData = new User();
     }
@@ -91,7 +91,7 @@ class Registration extends AbstractController
             return;
         }
 
-        foreach ($this->participantRepository->findBy(['id' => $ids]) as $participant) {
+        foreach ($this->participants->findBy(['id' => $ids]) as $participant) {
             /** @var BaseParticipant $participant */
             if (null === $participant) {
                 continue;

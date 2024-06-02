@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 #[AsHook('isVisibleElement')]
 class VisibleElementListener
 {
-    public function __construct(private readonly EditionRepository $passEditionRepository, private readonly TokenChecker $tokenChecker, private readonly RequestStack $requestStack, private readonly ScopeMatcher $scopeMatcher)
+    public function __construct(private readonly EditionRepository $editions, private readonly TokenChecker $tokenChecker, private readonly RequestStack $requestStack, private readonly ScopeMatcher $scopeMatcher)
     {
     }
 
@@ -41,7 +41,7 @@ class VisibleElementListener
                 return $visible;
             }
 
-            $passEdition = $this->passEditionRepository->findOneWithActiveTask((string) $element->ferienpass_task_condition);
+            $passEdition = $this->editions->findOneWithActiveTask((string) $element->ferienpass_task_condition);
 
             if ($element->ferienpass_task_condition_inverted) {
                 return null === $passEdition;

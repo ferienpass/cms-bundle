@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsContentElement(type: 'sign_in', category: 'ferienpass')]
 class SignInController extends AbstractContentElementController
 {
-    public function __construct(private readonly EditionRepository $editionRepository)
+    public function __construct(private readonly EditionRepository $editions)
     {
     }
 
@@ -52,7 +52,7 @@ class SignInController extends AbstractContentElementController
         }
 
         // Hide if no edition "to show".
-        if ($this->editionRepository->count([]) > 0 && null === $this->editionRepository->findOneToShow()) {
+        if ($this->editions->count([]) > 0 && null === $this->editions->findOneToShow()) {
             // return new Response('', Response::HTTP_NO_CONTENT);
         }
 

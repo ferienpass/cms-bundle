@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticipantType extends AbstractType
 {
-    public function __construct(private readonly Security $security, private readonly EditionRepository $editionRepository, #[Autowire(param: 'ferienpass.model.participant.class')] private readonly string $participantEntityClass, private readonly ParticipantRepositoryInterface $participantRepository)
+    public function __construct(private readonly Security $security, private readonly EditionRepository $editions, #[Autowire(param: 'ferienpass.model.participant.class')] private readonly string $participantEntityClass, private readonly ParticipantRepositoryInterface $participants)
     {
     }
 
@@ -89,7 +89,7 @@ class ParticipantType extends AbstractType
             ]);
         }
 
-        $editionsWithCode = $options['edition'] ? [$options['edition']] : $this->editionRepository->findWithActiveAccessCodeStrategies();
+        $editionsWithCode = $options['edition'] ? [$options['edition']] : $this->editions->findWithActiveAccessCodeStrategies();
         $builder->add('accessCodes', AccessCodesType::class, [
             'editions' => $editionsWithCode,
             'by_reference' => false,
@@ -109,7 +109,7 @@ class ParticipantType extends AbstractType
             'translation_domain' => 'cms',
             'data_class' => $this->participantEntityClass,
             'empty_data' => function (FormInterface $form) use ($user) {
-                $participant = $this->participantRepository->createNew();
+                $participant = $this->participants->createNew();
                 $participant->setUser($user);
 
                 return $participant;
