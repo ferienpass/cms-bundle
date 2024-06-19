@@ -175,13 +175,13 @@ class ApplyFormType extends AbstractType
             ->getResult()
         ;
 
-        // Only dates that are no longer than 8 hours
-        $participatingDates = array_filter($participatingDates, fn (OfferDate $d) => $d->getBegin() && $d->getEnd() && $d->getEnd()->diff($d->getBegin())->h <= 8);
+        // Only dates that are no longer than 1 day
+        $participatingDates = array_filter($participatingDates, fn (OfferDate $d) => $d->getBegin() && $d->getEnd() && $d->getEnd()->diff($d->getBegin())->days <= 1);
 
         // Walk every date the participant is already attending to…
         foreach ($offer->getDates() as $currentDate) {
-            // If current date is longer than 8 hours, it shall not block booking new offers
-            if ($currentDate->getBegin() && $currentDate->getEnd() && $currentDate->getEnd()->diff($currentDate->getBegin())->h > 8) {
+            // If current date is longer than 1 day, it shall not block booking new offers
+            if ($currentDate->getBegin() && $currentDate->getEnd() && $currentDate->getEnd()->diff($currentDate->getBegin())->days > 1) {
                 continue;
             }
 
