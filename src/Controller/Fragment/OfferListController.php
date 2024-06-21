@@ -16,8 +16,7 @@ namespace Ferienpass\CmsBundle\Controller\Fragment;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Doctrine\DBAL\Types\Types;
-use Ferienpass\CmsBundle\Filter\OfferListFilterFactory;
-use Ferienpass\CmsBundle\Form\ListFiltersType;
+use Ferienpass\CmsBundle\Filter\OfferListFilter;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
 use Ferienpass\CoreBundle\Pagination\Paginator;
 use Ferienpass\CoreBundle\Repository\EditionRepository;
@@ -31,7 +30,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 final class OfferListController extends AbstractController
 {
-    public function __construct(private readonly EditionRepository $editions, private readonly OfferRepositoryInterface $offers, private readonly OfferListFilterFactory $filterFactory, private readonly FormFactoryInterface $formFactory)
+    public function __construct(private readonly EditionRepository $editions, private readonly OfferRepositoryInterface $offers, private readonly OfferListFilter $filter, private readonly FormFactoryInterface $formFactory)
     {
     }
 
@@ -71,36 +70,37 @@ final class OfferListController extends AbstractController
             ;
         }
 
-        $filter = $this->filterFactory->create($qb)->applyFilter($request->query->all());
+        $filterForm = $this->instantiateForm($request);
+        $this->filter->apply($qb, $filterForm);
 
         $qb->orderBy('dates.begin');
 
         $paginator = (new Paginator($qb))->paginate($request->query->getInt('page', 1));
 
-        if ($request->query->has('filter')) {
-            // Get the normalized form data from query
-            if ($request->query->count()) {
-                $form = $this->formFactory->create(ListFiltersType::class);
-                $form->submit($request->query->all());
-                $data = $form->getData();
-            }
-
-            $form = $this->formFactory->create(ListFiltersType::class, $data ?? null, ['action' => $request->getUri()]);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                throw new RedirectResponseException($this->getFilterUrl($form, $request));
+        if ($request->query->has('filter') && $filterForm->handleRequest($request)) {
+            if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+                throw new RedirectResponseException($this->getFilterUrl($filterForm, $request));
             }
         }
 
         $this->tagResponse(array_map(fn (OfferInterface $offer) => 'offer.'.$offer->getId(), (array) $paginator->getResults()));
 
         return $this->render('@FerienpassCms/fragment/offer_list.html.twig', [
-            'filterForm' => $form ?? null,
+            'filterForm' => $filterForm,
             'edition' => $edition ?? null,
-            'filter' => $filter,
+            'filter' => $filter ?? null,
             'pagination' => $paginator,
         ]);
+    }
+
+    protected function instantiateForm(Request $request): FormInterface
+    {
+        $filterDataFromUrl = array_filter($request->query->all(), fn (string $key) => \in_array($key, $this->filter->getFilterNames(), true), \ARRAY_FILTER_USE_KEY);
+
+        $filterForm = $this->formFactory->create($this->filter::class);
+        $filterForm->submit($filterDataFromUrl);
+
+        return $this->formFactory->create($this->filter::class, $filterForm->getData(), ['action' => $request->getUri()]);
     }
 
     private function getFilterUrl(FormInterface $form, Request $request): string

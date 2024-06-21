@@ -15,13 +15,15 @@ namespace Ferienpass\CmsBundle\Filter\Type;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Contracts\Translation\TranslatableInterface;
 
 interface FilterType
 {
+    /**
+     * Allows you to modify whether the filter shall be displayed in the form, regardless of whether the filter is applied.
+     */
+    public function shallDisplay(): bool;
+
     public static function getName(): string;
 
-    public function applyFilter(QueryBuilder $qb, FormInterface $form);
-
-    public function getViewData(FormInterface $form): ?TranslatableInterface;
+    public function apply(QueryBuilder $qb, FormInterface $form);
 }

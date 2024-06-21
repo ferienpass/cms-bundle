@@ -15,6 +15,8 @@ namespace Ferienpass\CmsBundle\Controller\Frontend;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\PageModel;
 use Ferienpass\CoreBundle\Entity\Offer\OfferInterface;
 use Ferienpass\CoreBundle\Repository\OfferRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,8 +26,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/{id}', requirements: ['id' => '\d+'], defaults: ['_scope' => ContaoCoreBundle::SCOPE_FRONTEND])]
 class RedirectShortUrlController extends AbstractController
 {
-    public function __invoke(int $id, OfferRepositoryInterface $offers)
+    public function __invoke(int $id, OfferRepositoryInterface $offers, ContaoFramework $contaoFramework)
     {
+        $contaoFramework->initialize();
+
         /** @var OfferInterface $offer */
         $offer = $offers->find($id);
         if (null === $offer) {
@@ -38,6 +42,12 @@ class RedirectShortUrlController extends AbstractController
 
         if ($offer->isVariant() || $offer->hasVariants()) {
             $base = $offer->getVariantBase() ? $offer->getVariantBase()->getId() : $offer->getId();
+            $edition = $offer->getEdition();
+
+            $page = PageModel::findOneBy(['type="offer_list"', 'edition=?'], [$edition->getId()]);
+            if (null !== $page) {
+                return $this->redirectToRoute('tl_page.'.$page->id, ['base' => $base], Response::HTTP_MOVED_PERMANENTLY);
+            }
 
             return $this->redirectToRoute('offer_list', ['base' => $base], Response::HTTP_MOVED_PERMANENTLY);
         }

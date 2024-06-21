@@ -43,8 +43,12 @@ class FeeType extends AbstractOfferFilterType
         ]);
     }
 
-    public function applyFilter(QueryBuilder $qb, FormInterface $form)
+    public function apply(QueryBuilder $qb, FormInterface $form)
     {
+        if ($form->isEmpty()) {
+            return;
+        }
+
         $k = $form->getName();
         $v = $form->getData();
 
@@ -54,7 +58,7 @@ class FeeType extends AbstractOfferFilterType
         ;
     }
 
-    public function getViewData(FormInterface $form): ?TranslatableInterface
+    public function getHumanReadableValue(FormInterface $form): null|string|TranslatableInterface
     {
         return new TranslatableMessage('offerList.filter.fee', ['value' => number_format((float) $form->getViewData(), 2, ',', '.')]);
     }

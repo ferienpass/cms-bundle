@@ -26,7 +26,7 @@
                         Weitere Filter…
                     </a>
 
-                    {% if filterForm is not null %}
+                    {% if app.request.query.get('filter') %}
 
                         <turbo-frame id="modal">
 
@@ -43,34 +43,11 @@
 
                                 {{ form_start(filterForm, { attr: { 'data-turbo-frame' : '_top'}}) }}
 
-                                <div class="grid gap-3 grid-cols-8">
+                                <div class="grid gap-3 grid-cols-4">
 
-                                    <div class="col-span-2">
-                                        {{ form_label(filterForm.name, null) }}
-                                        {{ form_widget(filterForm.name) }}
-                                    </div>
-
-                                    <div class="">
-                                        {{ form_label(filterForm.age, null) }}
-                                        {{ form_widget(filterForm.age) }}
-                                    </div>
-                                    <div class="">
-                                        {{ form_label(filterForm.fee, null) }}
-                                        {{ form_widget(filterForm.fee) }}
-                                    </div>
-
-                                    <div class="col-span-2">
-                                        {{ form_label(filterForm.earliest_date, null) }}
-                                        {{ form_widget(filterForm.earliest_date) }}
-                                    </div>
-                                    <div class="col-span-2">
-                                        {{ form_label(filterForm.latest_date, null) }}
-                                        {{ form_widget(filterForm.latest_date) }}
-                                    </div>
-
-                                    <div class="mt-6">
-                                        {{ form_row(filterForm.favorites) }}
-                                    </div>
+                                    {% for widget in filterForm.children|filter((filter) => filter.vars.display|default(false)) %}
+                                        {{ form_row(widget) }}
+                                    {% endfor %}
 
                                 </div>
 
@@ -78,7 +55,7 @@
                                     {{ form_row(filterForm.submit) }}
                                 </div>
 
-                                {{ form_end(filterForm) }}
+                                {{ form_end(filterForm, { render_rest: false }) }}
                             </div>
 
                         </turbo-frame>
@@ -92,6 +69,7 @@
                 {% include '@FerienpassCore/Component/divider_title_left.html.twig' with { title: "Alle Angebote" } %}
             </div>
 
+            {% if filter is not null %}
             <div class="px-4 sm:px-0">
 
                 <div class="mt-2 mb-6">
@@ -111,6 +89,7 @@
 
                 </div>
             </div>
+                {% endif %}
 
             {% include '@FerienpassCore/Partial/offer_list.html.twig' with { offers: pagination.results } %}
 

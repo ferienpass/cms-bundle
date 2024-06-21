@@ -46,8 +46,12 @@ class CategoryType extends AbstractOfferFilterType
         ]);
     }
 
-    public function applyFilter(QueryBuilder $qb, FormInterface $form)
+    public function apply(QueryBuilder $qb, FormInterface $form)
     {
+        if ($form->isEmpty()) {
+            return;
+        }
+
         $v = $form->getData();
 
         $qb->andWhere($qb->expr()->orX(...array_map(fn ($i) => ':q_'.$i.' MEMBER OF o.categories', array_keys($v->toArray()))));
@@ -56,7 +60,7 @@ class CategoryType extends AbstractOfferFilterType
         }
     }
 
-    public function getViewData(FormInterface $form): ?TranslatableInterface
+    public function getHumanReadableValue(FormInterface $form): null|string|TranslatableInterface
     {
         $value = implode(', ', array_map(fn (OfferCategory $c) => $c->getName(), $form->getData()->toArray()));
 

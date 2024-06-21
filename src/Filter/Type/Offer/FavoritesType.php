@@ -47,8 +47,12 @@ class FavoritesType extends AbstractOfferFilterType
         ]);
     }
 
-    public function applyFilter(QueryBuilder $qb, FormInterface $form)
+    public function apply(QueryBuilder $qb, FormInterface $form)
     {
+        if ($form->isEmpty()) {
+            return;
+        }
+
         $k = $form->getName();
         $savedOffers = $this->requestStack->getSession()->isStarted() ? $this->requestStack->getSession()->get('saved_offers') : [];
 
@@ -58,7 +62,7 @@ class FavoritesType extends AbstractOfferFilterType
         ;
     }
 
-    public function getViewData(FormInterface $form): ?TranslatableInterface
+    public function getHumanReadableValue(FormInterface $form): null|string|TranslatableInterface
     {
         return new TranslatableMessage('offerList.filter.favorites');
     }

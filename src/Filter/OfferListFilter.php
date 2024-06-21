@@ -15,38 +15,56 @@ namespace Ferienpass\CmsBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use Ferienpass\CmsBundle\Filter\Type\FilterType;
+use Ferienpass\CmsBundle\Form\SimpleType\ContaoRequestTokenType;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatableInterface;
 
-class OfferListFilter
+class OfferListFilter extends AbstractType
 {
     /** @var array<string, TranslatableInterface> */
     private array $filtersViewData = [];
 
-    /**
-     * @param array<string,FilterType> $filterTypes
-     */
-    public function __construct(private readonly FormInterface $form, private readonly DoctrineQueryBuilder $queryBuilder, private array $filterTypes)
+    /** @param array<string,FilterType> $filterTypes */
+    private array $filterTypes = [];
+
+    public function __construct(#[TaggedIterator('ferienpass.filter.offer_list_type', defaultIndexMethod: 'getName')] iterable $filterTypes)
     {
+        $this->filterTypes = $filterTypes instanceof \Traversable ? iterator_to_array($filterTypes, true) : $this->filterTypes;
     }
 
-    public function applyFilter(array $values): self
+    public function apply(DoctrineQueryBuilder $qb, FormInterface $form): void
     {
-        // Re-evaluate the form by the actual values from the URL
-        $this->form->submit($values);
-
-        foreach (array_keys((array) $this->form->getData()) as $name) {
-            $form = $this->form->get($name);
-            if ($form->isEmpty()) {
+        foreach ($this->filterTypes as $k => $filter) {
+            if (!is_a($filter, FilterType::class, true)) {
                 continue;
             }
 
-            $this->getFilterType($name)?->applyFilter($this->queryBuilder, $form);
+            $filter->apply($qb, $form->get($k));
+        }
+    }
 
-            $this->filtersViewData[$name] = $this->getFilterType($name)?->getViewData($form);
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        foreach ($this->filterTypes as $filterName => $filterType) {
+            if ($builder->has($filterName)) {
+                continue;
+            }
+
+            $builder->add($filterName, $filterType::class);
         }
 
-        return $this;
+        $builder->add('submit', SubmitType::class, ['label' => 'Filtern']);
+        $builder->add('request_token', ContaoRequestTokenType::class);
+    }
+
+    public function getFilterNames(): array
+    {
+        return array_keys($this->filterTypes);
     }
 
     /**
@@ -59,8 +77,8 @@ class OfferListFilter
         return $this->filtersViewData;
     }
 
-    private function getFilterType(string $name): ?FilterType
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        return $this->filterTypes[$name] ?? null;
+        $resolver->setDefault('csrf_protection', false);
     }
 }
