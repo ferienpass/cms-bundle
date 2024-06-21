@@ -1,10 +1,10 @@
 <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-    <div class="relative bg-white">
+    <div class="relative bg-white dark:bg-gray-800">
         <div class="absolute inset-0">
             <div class="absolute inset-y-0 left-0 w-1/2 bg-gray-50"></div>
         </div>
         <div class="relative max-w-7xl mx-auto lg:grid lg:grid-cols-6">
-            <div class="bg-white py-16 px-4 sm:px-6 lg:col-span-4 lg:py-24 lg:px-8 xl:pl-12">
+            <div class="bg-white dark:bg-gray-800 py-16 px-4 sm:px-6 lg:col-span-4 lg:py-24 lg:px-8 xl:pl-12">
                 <div class="max-w-lg mx-auto lg:max-w-none">
                     {% block content %}
 
@@ -29,16 +29,16 @@
                         {% endif %}
                         {% import "@FerienpassCore/Macro/offer.html.twig" as offer_macro %}
                         <h1 class="mb-2">{{ offer.name }}</h1>
-                        <div class="font-semibold text-xl text-gray-500 mb-4">{{ offer_macro.age(offer) }}</div>
-                        <div class="text-gray-500 text-lg">{{ offer.description|encodeEmail }}</div>
-                        <div class="mt-6 text-xl font-semibold">{{ offer_macro.date_combined(offer.dates) }}</div>
+                        <div class="font-semibold text-xl text-gray-500 dark:text-gray-300 mb-4">{{ offer_macro.age(offer) }}</div>
+                        <div class="text-gray-500 dark:text-gray-300 text-lg">{{ offer.description|encodeEmail }}</div>
+                        <div class="mt-6 text-xl font-semibold dark:text-white">{{ offer_macro.date_combined(offer.dates) }}</div>
                         {% if offer.comment|default %}
-                            <p class="text-base text-gray-500">{{ offer.comment }}</p>
+                            <p class="text-base text-gray-500 dark:text-gray-300">{{ offer.comment }}</p>
                         {% endif %}
                         <div class="mt-6 flex leading-5 flex-wrap">
                             {% if offer.meetingPoint|default %}
-                                <div class="flex items-center text-gray-700 text-lg mr-6 mb-2">
-                                    <svg class="h-6 w-6 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <div class="flex items-center text-gray-700 dark:text-gray-300 text-lg mr-6 mb-2">
+                                    <svg class="h-6 w-6 mr-2 text-gray-500 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                               clip-rule="evenodd" fill-rule="evenodd"></path>
                                     </svg>
@@ -46,8 +46,8 @@
                                 </div>
                             {% endif %}
                             {% if offer.location|default %}
-                                <div class="flex items-center text-gray-700 text-lg mr-6 mb-2">
-                                    <svg class="h-6 w-6 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <div class="flex items-center text-gray-700 dark:text-gray-300 text-lg mr-6 mb-2">
+                                    <svg class="h-6 w-6 mr-2 text-gray-500 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                               clip-rule="evenodd" fill-rule="evenodd"></path>
                                     </svg>
@@ -55,8 +55,8 @@
                                 </div>
                             {% endif %}
                             {% if offer.bring|default %}
-                                <div class="flex items-center text-gray-700 text-lg mr-6 mb-2">
-                                    <svg class="h-6 w-6 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 512 512">
+                                <div class="flex items-center text-gray-700 dark:text-gray-300 text-lg mr-6 mb-2">
+                                    <svg class="h-6 w-6 mr-2 text-gray-500 dark:text-gray-500" fill="currentColor" viewBox="0 0 512 512">
                                         <path d="M192,512h128c50.7-0.1,94.3-35.7,104.5-85.3H87.5C97.7,476.3,141.3,511.9,192,512z"/>
                                         <path d="M417.5,287.9c-20,20.5-47.5,32.1-76.2,32.1H320v42.7h-42.7V320h-42.7v42.7H192V320h-21.3c-28.7,0-56.1-11.6-76.2-32.1
 	l-9,72.1c-0.1,0.9-0.2,1.8-0.2,2.6v42.7h341.3v-42.7c0-0.9-0.1-1.8-0.2-2.6L417.5,287.9z"/>
@@ -68,8 +68,8 @@
                                     <span>{{ offer.bring }}</span>
                                 </div>
                             {% endif %}
-                            <div class="flex items-center text-gray-700 text-lg mb-2">
-                                <svg class="h-6 w-6 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="flex items-center text-gray-700 dark:text-gray-300 text-lg mb-2">
+                                <svg class="h-6 w-6 mr-2 text-gray-500 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472c.08-.185.167-.36.264-.521z"
                                           clip-rule="evenodd" fill-rule="evenodd"></path>
                                 </svg>
@@ -79,7 +79,7 @@
 
                         {% if attachments is not empty %}
                             <div class="mt-6 text-sm text-gray-900">
-                                <ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
+                                <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700 border-t border-b border-gray-200">
                                     {% for download in attachments %}
                                         <li class="flex items-center justify-between py-4 pl-2 pr-3 text-sm leading-6">
                                             <div class="flex w-0 flex-1 items-center">
@@ -107,7 +107,7 @@
                     {% endblock content %}
                 </div>
             </div>
-            <div class="bg-gray-50 py-16 px-4 sm:px-6 lg:col-span-2 lg:px-8 lg:py-24 xl:pr-12">
+            <div class="bg-gray-900 py-16 px-4 sm:px-6 lg:col-span-2 lg:px-8 lg:py-24 xl:pr-12">
                 <div class="max-w-lg mx-auto">
                     {% block sidebar %}
 
@@ -136,7 +136,7 @@
                                    class="font-medium text-primary-600 hover:underline">Anmelden &darr;</a>
                             </div>
                         {% endif %}
-                        <dl class="mt-8 text-base leading-6 text-gray-500">
+                        <dl class="mt-8 text-base leading-6 text-gray-500 dark:text-gray-300">
                             {% for member in members %}
                                 <div class="">
                                     <dt class="sr-only">Ansprechpartner</dt>
@@ -193,15 +193,15 @@
                             {% endfor %}
                         </dl>
 
-                        <div class="border-b mt-10 mb-10"></div>
+                        <div class="border-b dark:border-gray-700 mt-10 mb-10"></div>
                         {% if offer.cancelled %}
-                            <span class="block text-gray-500 font-semibold leading-6">Angebot abgesagt</span>
-                            <span class="block text-gray-500 text-sm leading-5">Das Angebot findet nicht mehr statt.
+                            <span class="block text-gray-500 dark:text-gray-300 font-semibold leading-6">Angebot abgesagt</span>
+                            <span class="block text-gray-500 dark:text-gray-300 text-sm leading-5">Das Angebot findet nicht mehr statt.
                                 Anmeldungen sind nicht möglich.</span>
                         {% else %}
                             {% if offer.requiresApplication|default %}
-                                <span class="block text-gray-500 font-semibold leading-6">Anmeldung erforderlich</span>
-                                <span class="block text-gray-500 text-sm leading-5">
+                                <span class="block text-gray-500 dark:text-gray-300 font-semibold leading-6">Anmeldung erforderlich</span>
+                                <span class="block text-gray-500 dark:text-gray-300 text-sm leading-5">
                                     {% if offer.onlineApplication %}
                                         Verwenden Sie das <a href="{{ app.request.requestUri }}#anmelden"
                                                              class="underline hover:no-underline">unten stehende
@@ -221,14 +221,14 @@
                                                       stroke-width="2"
                                                       d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            <span class="ml-2 text-gray-500 text-sm leading-5">{{ offer.applyText|encodeEmail }}</span>
+                                            <span class="ml-2 text-gray-500 dark:text-gray-300 text-sm leading-5">{{ offer.applyText|encodeEmail }}</span>
                                         </dd>
                                     </dl>
                                 {% endif %}
                             {% else %}
-                                <span class="block text-gray-500 font-semibold leading-6">keine Anmeldung
+                                <span class="block text-gray-500 dark:text-gray-300 font-semibold leading-6">keine Anmeldung
                                     erforderlich</span>
-                                <span class="block text-gray-500 text-sm leading-5">Teilnahme ohne Anmeldung
+                                <span class="block text-gray-500 dark:text-gray-300 text-sm leading-5">Teilnahme ohne Anmeldung
                                     möglich.</span>
                             {% endif %}
                         {% endif %}
