@@ -45,6 +45,9 @@ class ApplicationListController extends AbstractController
         /** @var Collection<int, Attendance> $attendances */
         $attendances = $this->attendances->createQueryBuilder('a')
             ->innerJoin('a.participant', 'p')
+            ->innerJoin('a.offer', 'o')
+            ->leftJoin('o.dates', 'd')
+            ->orderBy('d.begin')
             ->where('p.user = :member')
             ->setParameter('member', $user->getId())
             ->getQuery()

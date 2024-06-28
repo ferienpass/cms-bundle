@@ -50,25 +50,25 @@
 
             <div class="">
 
-                <h3 class="text-lg font-bold leading-6 text-gray-900 dark:text-gray-50">{{ edition.name }}: <span
+                <h3 class="text-lg font-bold leading-6 text-gray-900 dark:text-gray-50 dark:text-gray-50">{{ edition.name }}: <span
                             class="font-medium">Anmeldungen</span></h3>
 
                 <table class="mt-4 min-w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-50 sm:pl-0">
                             Veranstaltung
                         </th>
                         <th scope="col"
-                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-50">
                             Teilnehmer:in
                         </th>
                         <th scope="col"
-                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-50 md:table-cell">
                             Anmeldung
                         </th>
                         <th scope="col"
-                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-50 sm:table-cell">
                             Priorität
                         </th>
                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
@@ -80,18 +80,18 @@
                     {% for attendance in attendances|filter(a => a.offer.edition == edition) %}
                         {% set applicationSystem = attribute(applicationSystems, attendance.id) %}
                         <tr>
-                            <td class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                                <a class="block hover:underline"
+                            <td class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-50 sm:w-auto sm:max-w-none sm:pl-0">
+                                <a class="block hover:underline font-medium"
                                    href="{{ path('offer_details', { alias: attendance.offer.alias }) }}">{{ attendance.offer.name }}</a>
                                 <span class="block">{{ offer_macro.date_combined(attendance.offer.dates) }}</span>
 
                                 <dl class="font-normal lg:hidden">
                                     <dt class="sr-only md:hidden">Anmeldung</dt>
-                                    <dd class="mt-1 truncate text-gray-500 md:hidden">
+                                    <dd class="mt-1 truncate text-gray-500 dark:text-gray-200 md:hidden">
                                         {{ _self.status_badge(attendance, applicationSystem) }}
                                     </dd>
                                     <dt class="sr-only sm:hidden">Priorität</dt>
-                                    <dd class="mt-1 truncate text-gray-500 sm:hidden">
+                                    <dd class="mt-1 truncate text-gray-500 dark:text-gray-200 sm:hidden">
 
                                         {% if attendance.task and attendance.task.maxApplications %}
                                             <div class="flex items-center space-x-1">
@@ -126,11 +126,11 @@
                                     </dd>
                                 </dl>
                             </td>
-                            <td class="px-3 py-4 text-sm text-gray-500">{{ attendance.participant.firstname }}</td>
-                            <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">
+                            <td class="px-3 py-4 text-sm text-gray-500 dark:text-gray-200">{{ attendance.participant.firstname }}</td>
+                            <td class="hidden px-3 py-4 text-sm text-gray-500 dark:text-gray-200 md:table-cell">
                                 {{ _self.status_badge(attendance, applicationSystem) }}
                             </td>
-                            <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                            <td class="hidden px-3 py-4 text-sm text-gray-500 dark:text-gray-200 sm:table-cell">
 
 
                                 {% if attendance.task and attendance.task.maxApplications %}
